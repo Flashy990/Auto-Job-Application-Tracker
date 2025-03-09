@@ -25,7 +25,9 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// Spring Data JPA for database operations
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// PostgreSQL driver for connecting to your PostgreSQL database
 	implementation 'org.postgresql:postgresql'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
