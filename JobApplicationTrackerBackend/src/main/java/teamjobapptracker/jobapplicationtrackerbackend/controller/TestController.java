@@ -11,5 +11,4 @@ public class TestController {
   public String getString(@PathVariable int testId) {
     return "Hello World: " + testId;
   }
-
 }
