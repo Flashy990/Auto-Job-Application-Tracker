@@ -54,7 +54,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public List<JobApplicationDTO> getAllApplicationsForUser(Long userId) {
         // Find the user
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         
         // Get all applications for the user
         List<JobApplication> applications = jobApplicationRepository.findByUser(user);
@@ -69,7 +69,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status) {
         // Find the user
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         
         // Get applications for the user with the specified status
         List<JobApplication> applications = jobApplicationRepository.findByUserAndStatus(user, status);
@@ -84,7 +84,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public JobApplicationDTO updateApplication(Long id, JobApplicationDTO applicationDTO) {
         // Find the application
         JobApplication existingApplication = jobApplicationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job application not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job application", "id", id));
         
         // Update fields
         existingApplication.setCompanyName(applicationDTO.getCompanyName());
@@ -109,7 +109,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public JobApplicationDTO updateApplicationStatus(Long id, String status) {
         // Find the application
         JobApplication existingApplication = jobApplicationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job application not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job application", "id", id));
         
         // Update status
         existingApplication.setStatus(status);
@@ -124,7 +124,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public void deleteApplication(Long id) {
         if (!jobApplicationRepository.existsById(id)) {
-            throw new RuntimeException("Job application not found with id: " + id);
+            throw new ResourceNotFoundException("Job application", "id", id);
         }
         jobApplicationRepository.deleteById(id);
     }
