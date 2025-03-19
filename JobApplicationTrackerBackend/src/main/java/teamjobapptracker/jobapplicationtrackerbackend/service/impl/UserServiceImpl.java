@@ -6,6 +6,7 @@ import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.model.User;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.UserRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
+import teamjobapptracker.jobapplicationtrackerbackend.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,14 +31,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         return convertToDTO(user);
     }
 
     @Override
     public UserDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
         return convertToDTO(user);
     }
 
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         
         // Update user fields
         existingUser.setEmail(userDTO.getEmail());
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found with id: " + id);
+            throw new ResourceNotFoundException("User", "id", id);
         }
         userRepository.deleteById(id);
     }

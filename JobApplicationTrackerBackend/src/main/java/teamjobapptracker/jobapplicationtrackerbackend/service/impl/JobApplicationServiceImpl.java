@@ -8,6 +8,7 @@ import teamjobapptracker.jobapplicationtrackerbackend.model.User;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.JobApplicationRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.UserRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.service.JobApplicationService;
+import teamjobapptracker.jobapplicationtrackerbackend.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public JobApplicationDTO createApplication(JobApplicationDTO applicationDTO) {
         // Find the user
         User user = userRepository.findById(applicationDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + applicationDTO.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", applicationDTO.getUserId()));
         
         // Convert DTO to entity
         JobApplication application = convertToEntity(applicationDTO);
@@ -44,7 +45,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public JobApplicationDTO getApplicationById(Long id) {
         JobApplication application = jobApplicationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job application not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job application", "id", id));
         
         return convertToDTO(application);
     }
