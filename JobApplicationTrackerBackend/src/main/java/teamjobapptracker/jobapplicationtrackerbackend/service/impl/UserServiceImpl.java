@@ -1,6 +1,7 @@
 package teamjobapptracker.jobapplicationtrackerbackend.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.model.User;
@@ -8,22 +9,42 @@ import teamjobapptracker.jobapplicationtrackerbackend.repository.UserRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
 import teamjobapptracker.jobapplicationtrackerbackend.exception.ResourceNotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+        // Check if email already exists
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         User user = convertToEntity(userDTO);
+        
+        // Set default role if none provided
+        if (user.getRoles().isEmpty()) {
+            Set<String> defaultRoles = new HashSet<>();
+            defaultRoles.add("USER");
+            user.setRoles(defaultRoles);
+        }
+
+        // Encrypt password
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
@@ -61,7 +82,7 @@ public class UserServiceImpl implements UserService {
         
         // Only update password if provided
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
-            existingUser.setPassword(userDTO.getPassword()); // In a real app, you'd hash this
+            existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
         
         User updatedUser = userRepository.save(existingUser);
@@ -83,22 +104,17 @@ public class UserServiceImpl implements UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        userDTO.setRole(user.getRole());
-        // Don't set password in DTO for security reasons
+        // Do not set password in DTO for security reasons
         return userDTO;
     }
 
     private User convertToEntity(UserDTO userDTO) {
         User user = new User();
         user.setEmail(userDTO.getEmail());
-
-        // TODO: MAYBE HASH THIS LATER??
-        user.setPassword(userDTO.getPassword());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        if (userDTO.getRole() != null) {
-            user.setRole(userDTO.getRole());
-        }
+        // Initialize empty set of roles
+        user.setRoles(new HashSet<>());
         return user;
     }
 } 
