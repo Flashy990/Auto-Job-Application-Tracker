@@ -9,7 +9,7 @@ public interface JobApplicationService {
     JobApplicationDTO createApplication(JobApplicationDTO applicationDTO);
     
     // Get a specific application by ID
-    JobApplicationDTO getApplicationById(Long id);
+    JobApplicationDTO getApplicationById(Long id, Long userId);
     
     // Get all applications for the current user
     List<JobApplicationDTO> getAllApplicationsForUser(Long userId);
@@ -18,11 +18,11 @@ public interface JobApplicationService {
     List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status);
     
     // Update an existing application
-    JobApplicationDTO updateApplication(Long id, JobApplicationDTO applicationDTO);
+    JobApplicationDTO updateApplication(Long id, JobApplicationDTO applicationDTO, Long userId);
     
     // Update just the status of an application
-    JobApplicationDTO updateApplicationStatus(Long id, String status);
+    JobApplicationDTO updateApplicationStatus(Long id, String status, Long userId);
     
     // Delete an application
-    void deleteApplication(Long id);
+    void deleteApplication(Long id, Long userId);
 } 

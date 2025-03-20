@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        // Do not set password in DTO for security reasons
+        // Do not password in DTO for security reasons
         return userDTO;
     }
 
