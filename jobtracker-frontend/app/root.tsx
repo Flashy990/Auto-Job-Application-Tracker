@@ -10,8 +10,10 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { Toaster } from 'react-hot-toast';
 
-import birdIcon from "../public/bird-icon.svg";
+import birdIcon from "/bird-icon.svg";
+import { AuthProvider } from "./context/AuthContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,7 +43,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <AuthProvider>
+          <div><Toaster /></div>
+          {children}
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

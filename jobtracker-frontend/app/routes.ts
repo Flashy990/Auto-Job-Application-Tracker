@@ -4,6 +4,7 @@ export default [
     index("routes/home.tsx"),
     layout("routes/auth/layout.tsx", [
         route("signup", "routes/auth/signup.tsx"),
+        route("signup/password", "routes/auth/password.tsx"),
         route("login", "routes/auth/login.tsx"),
     ]),
     ...prefix("dashboard", [

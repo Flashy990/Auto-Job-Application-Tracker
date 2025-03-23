@@ -1,7 +1,9 @@
-import googleLogo from "../../../public/images/Google_Icons.webp";
-import linkedinLogo from "../../../public/images/circle-linkedin.webp";
+import googleLogo from "/images/Google_Icons.webp";
+import linkedinLogo from "/images/circle-linkedin.webp";
 
 export default function Signup() {
+    
+
 
     return (
         <div className="flex flex-col items-center gap-5 justify-center mt-[20vh]">
@@ -16,7 +18,7 @@ export default function Signup() {
             </div>
             <p>or sign up with your email</p>
             <form action="" className="flex flex-col items-center gap-5">
-                <input type="text" placeholder="Email" className="border-2 h-8 placeholder:pl-2"/>
+                <input type="text" placeholder="Email" className="border-2 h-8 placeholder:pl-2 rounded-[5px]"/>
                 <button type="submit" className="bg-[#FFC457] text-gray-900 w-fit px-4 py-1 rounded-2xl">Get Started</button>
             </form>
             <p>Already a memeber? <u>Sign in</u></p>

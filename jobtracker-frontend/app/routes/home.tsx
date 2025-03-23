@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
-import { useEffect, useRef, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
