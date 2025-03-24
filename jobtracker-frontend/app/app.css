@@ -11,6 +11,33 @@
 
   --breakpoint-md:900px;
   --breakpoint-lg:1375px;
+
+  --animate-slide-in: slide-in 0.6s forwards;
+  --animate-slide-out: slide-out 0.8s forwards;
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(200px);
+      visibility: hidden;
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out {
+    0% {
+      transform: translateX(0);
+      
+    }
+    75% {
+      transform: translateX(200px);
+    }
+    100%{
+      transform: translateX(200px);
+      display: none;
+    }
+  }
 }
 
 html,

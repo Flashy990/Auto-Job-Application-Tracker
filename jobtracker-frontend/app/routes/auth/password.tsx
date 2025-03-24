@@ -16,16 +16,16 @@ export default function Password() {
         }
     });
 
-    const validatePassword = (password: string) => {
+    const validatePassword =  {
+        length: password.length >= 6,
+        upper: /[A-Z]/.test(password),
+        lower: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special:/[!@#$%^&*? ]/.test(password),
+    };
+    
 
-        return {
-            length: password.length > 6,
-            upper: /[A-Z]/.test(password),
-            lower: /[a-z]/.test(password),
-            number: /[0-9]/.test(password),
-            special:/[!@#$%^&*? ]/.test(password),
-        };
-    }
+
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -44,11 +44,11 @@ export default function Password() {
                 <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="flex items-center border-2 h-8 px-2 w-70 rounded-[5px]"/>
                 <input type="password" name='confirmPassword' placeholder="Confirm password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="flex border-2 h-8 px-2 w-70 rounded-[5px]"/>
                 {password && <div>
-                    <div>{validatePassword(password).length ? '✔️' : '❌'} at least 6 characters</div>
-                    <div>{validatePassword(password).upper ? '✔️' : '❌'} one uppercase letter</div>
-                    <div>{validatePassword(password).lower ? '✔️' : '❌'} one lowercase letter</div>
-                    <div>{validatePassword(password).number ? '✔️' : '❌'} one number</div>
-                    <div>{validatePassword(password).special ? '✔️' : '❌'} one special characeter(!@#$%^&*? )</div>
+                    <div>{validatePassword.length ? '✔️' : '❌'} at least 6 characters</div>
+                    <div>{validatePassword.upper ? '✔️' : '❌'} one uppercase letter</div>
+                    <div>{validatePassword.lower ? '✔️' : '❌'} one lowercase letter</div>
+                    <div>{validatePassword.number ? '✔️' : '❌'} one number</div>
+                    <div>{validatePassword.special ? '✔️' : '❌'} one special characeter(!@#$%^&*? )</div>
                 </div>}
                 {password && confirmPassword && <div className={`self-start ${password === confirmPassword ? '' : 'text-red-500'}`}>{password === confirmPassword ? '√ Passwords match' : 'x Passwords do not match'}</div>}
                 

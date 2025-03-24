@@ -1,5 +1,9 @@
+export interface Status {
+    name: string;
+    amount: number;
+}
 
-interface Application {
+export interface Application {
     id:number;
     jobPosition:string;
     company:string;
@@ -111,6 +115,29 @@ export const fakeApplications:Application[] = [
         status:'Applying',
         documents:['Resume', 'Cover Letter'],
         notes:''
+    }
+];
+
+export const fakeStatuses: Status[] = [
+    {
+        name:'Applying',
+        amount:10,
+    },
+    {
+        name:'Applied',
+        amount:7,
+    },
+    {
+        name:'Interviewing',
+        amount:5,
+    },
+    {
+        name:'Offered',
+        amount:8,
+    },
+    {
+        name:'Rejected',
+        amount:8,
     }
 ];
 

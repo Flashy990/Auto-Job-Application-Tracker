@@ -1,45 +1,5 @@
 import searchLogo from "/images/search.png";
-import { fakeApplications } from "./fakeData/fakeApplications";
-
-interface Status {
-    name: string;
-    amount: number;
-}
-
-interface Application {
-    id:number;
-    jobPosition:string;
-    company:string;
-    salaryRange:string;
-    location:string;
-    status:string;
-    documents:string[];
-    notes:string;
-}
-
-const statuses: Status[] = [
-    {
-        name:'Applying',
-        amount:10,
-    },
-    {
-        name:'Applied',
-        amount:7,
-    },
-    {
-        name:'Interviewing',
-        amount:5,
-    },
-    {
-        name:'Offered',
-        amount:8,
-    },
-    {
-        name:'Rejected',
-        amount:8,
-    }
-];
-
+import { fakeApplications, fakeStatuses } from "./fakeApplications";
 
 export default function Applications() {
 
@@ -54,7 +14,7 @@ export default function Applications() {
                     <div className="flex flex-col gap-5 flex-grow">
                         <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
                         <div className="flex flex-col gap-3">
-                            {statuses.map((status, index) => {
+                            {fakeStatuses.map((status, index) => {
                                 return <div key={index} className="flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100">
                                     <p className="text-[12px]">{status.name}</p>
                                     <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
