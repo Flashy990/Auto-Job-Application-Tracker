@@ -14,6 +14,7 @@ import { Toaster } from 'react-hot-toast';
 
 import birdIcon from "/bird-icon.svg";
 import { AuthProvider } from "./context/AuthContext";
+import { EmailProvider } from "./context/SignupEmailContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,8 +45,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <AuthProvider>
-          <div><Toaster /></div>
-          {children}
+          <EmailProvider>
+            <div><Toaster /></div>
+            {children}
+          </EmailProvider>
         </AuthProvider>
         <ScrollRestoration />
         <Scripts />

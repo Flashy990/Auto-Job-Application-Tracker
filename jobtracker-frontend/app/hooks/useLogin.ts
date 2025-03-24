@@ -21,7 +21,8 @@ export const useLogin = () => {
                 throw new Error(res.data.error);
             }
     
-            setAuthUser(res.data.userId); // change
+            setAuthUser(res.data); // change
+            toast.success('Logged in successfully');
             return true;
 
         } catch(error) {

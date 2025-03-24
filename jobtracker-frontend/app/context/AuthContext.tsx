@@ -30,7 +30,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
         try {
             const res = await axiosInstance.get('/auth/unknown'); // url unknown now
 
-            setAuthUser(res.data.userId ?? null);
+            setAuthUser(res.data);
         } catch (error) {
             setAuthUser(null);
         } finally {

@@ -29,7 +29,7 @@ export default function Login() {
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"></circle>
                         <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                     : 'Sign in'}
+                     : 'Log in'}
                 </button>
             </form>
             <p>or</p>
@@ -41,7 +41,7 @@ export default function Login() {
                 <img className="h-8" src={linkedinLogo} alt="LinkedIn-logo" />
                 <p className="text-[23px] text-gray-900">Continue with LinkedIn</p>
             </div>
-            <p>Not a member yet? <u>Create an account</u></p>
+            <p>Not a member yet? <u className="cursor-pointer" onClick={() => navigate('/signup')}>Create an account</u></p>
         </div>
     );
 };
