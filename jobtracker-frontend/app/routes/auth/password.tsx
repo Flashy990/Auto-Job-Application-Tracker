@@ -30,7 +30,7 @@ export default function Password() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const signedup = await signup(signupEmail, password, confirmPassword);
-        if(signedup) navigate('/signup/user-info'); // create the file for this.
+        if(signedup) navigate('/signup/user-info');
     };
 
 

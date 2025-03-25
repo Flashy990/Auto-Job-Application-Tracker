@@ -1,6 +1,10 @@
+import OptionsSelector from "~/components/OptionsSelector";
 import backLogo from "/images/arrow.png";
+import { useState } from "react";
 
 export default function ApplicationEdit() {
+    const [status, setStatus] = useState('');
+    const statusOptions = ['Applying', 'Applied', 'Interviewing', 'Offered', 'Rejected'];
 
     return (
         <main className="flex flex-row gap-8">
@@ -30,14 +34,9 @@ export default function ApplicationEdit() {
                             <input type="text" id="location" className="border-3 rounded-[10px]"/>
                         </div>
                         <div>
-                            <label htmlFor="status">Status: </label>
-                            <select id="status" className="border-3 rounded-[10px] cursor-pointer">
-                                <option value="Applying">Applying</option>
-                                <option value="Applied">Applied</option>
-                                <option value="Interviewing">Interviewing</option>
-                                <option value="Offered">Offered</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
+                            <label htmlFor="status">Status: 
+                                <OptionsSelector options={statusOptions} onChange={setStatus}/>
+                            </label>
                         </div>
                         <div>
                             <label htmlFor="documents">Documents: </label>
@@ -51,7 +50,7 @@ export default function ApplicationEdit() {
                         </div>
                         <div>
                             <label htmlFor="notes">Notes:</label>
-                            <input type="text" id="notes" className="border-3 block w-100 h-50 rounded-[10px]"/>
+                            <textarea id="notes" className="border-3 block w-100 h-50 rounded-[10px]"/>
                         </div>
                     </div>
                     <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px]">Submit</button>

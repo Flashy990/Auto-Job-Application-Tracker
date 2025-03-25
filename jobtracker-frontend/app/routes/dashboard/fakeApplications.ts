@@ -106,16 +106,6 @@ export const fakeApplications:Application[] = [
         documents:['Resume', 'Cover Letter'],
         notes:''
     },
-    {
-        id:10,
-        jobPosition:'Software Development Engineer',
-        company:'Airbnb',
-        salaryRange:'$120,000 - $170,000',
-        location:'San Francisco, CA',
-        status:'Applying',
-        documents:['Resume', 'Cover Letter'],
-        notes:''
-    }
 ];
 
 export const fakeStatuses: Status[] = [
