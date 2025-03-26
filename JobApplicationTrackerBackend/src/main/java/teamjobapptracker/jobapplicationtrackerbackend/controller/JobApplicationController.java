@@ -54,21 +54,21 @@ public class JobApplicationController {
     @PostMapping
     public ResponseEntity<JobApplicationDTO> createApplication(@RequestBody JobApplicationDTO applicationDTO) {
         Long userId = getAuthenticatedUserId();
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Current Authenticated User userId: " + userId);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Current Authenticated User userId: " + userId);
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         // Ensure the application is created for the authenticated user
         applicationDTO.setUserId(userId);
         
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Printing applicationDTO: " + applicationDTO.toString());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Printing applicationDTO: " + applicationDTO.toString());
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         
         JobApplicationDTO createdApplication = jobApplicationService.createApplication(applicationDTO);
         
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Printing JobApplicationDTO: " + createdApplication.toString());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Printing JobApplicationDTO: " + createdApplication.toString());
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         
         return new ResponseEntity<>(createdApplication, HttpStatus.CREATED);
     }
