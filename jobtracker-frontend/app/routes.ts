@@ -11,9 +11,16 @@ export default [
     ]),
     ...prefix("dashboard", [
         layout("routes/dashboard/layout.tsx", [
+            route("profile", "routes/dashboard/profile.tsx"),
             route("applications", "routes/dashboard/applications.tsx"),
             route("edit-application", "routes/dashboard/applicationEdit.tsx"),
-            route("profile", "routes/dashboard/settings.tsx"),
+            ...prefix("settings", [
+                layout("routes/dashboard/settings.tsx", [
+                    route("profile", "routes/dashboard/settings/profile.tsx"),
+                    route("privacy", "routes/dashboard/settings/privacy.tsx"),
+                    route("automatic", "routes/dashboard/settings/automatic.tsx"),
+                ])
+            ])
         ]),
     ]),
 ] satisfies RouteConfig;

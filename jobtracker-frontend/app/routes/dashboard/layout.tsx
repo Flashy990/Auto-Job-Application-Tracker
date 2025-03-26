@@ -1,10 +1,30 @@
-import { Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import maleAvatar from "/images/male-avatar.png";
 import userLogo from '/images/user.png';
 import dashboardLogo from '/images/dashboard.png';
 import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
+
+
+const links = [
+    {
+        name:'Your profile',
+        path:'/dashboard/profile',
+        pic: userLogo,
+    },
+    {
+        name:'Your applications',
+        path:'/dashboard/applications',
+        pic:dashboardLogo,
+    },
+    {
+        name:'Settings',
+        path:'/dashboard/settings/profile',
+        pic:settingLogo,
+    }
+];
+
 
 export default function DashboardLayout() {
     const [showNav, setShowNav] = useState(false);
@@ -53,20 +73,14 @@ export default function DashboardLayout() {
             </header>
             <nav ref={navRef} className={`absolute w-fit flex flex-col right-0 z-100
                 top-[${headerRef.current?.getBoundingClientRect().width}] bg-[#BAD8C6] 
-                rounded-l-[5px] px-4 py-2 gap-4 ${showNav ? 'animate-slide-in' : 'animate-slide-out'} ${avatarClicked ? '' : 'hidden'} transition-all`}>
-                <div className="flex flex-row gap-2 items-center">
-                    <img className="h-4" src={userLogo} alt="profile-logo" />
-                    <p>Your profile</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                    <img className="h-4" src={dashboardLogo} alt="dashboard-logo" />
-                    <p>Your applications</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                    <img className="h-4" src={settingLogo} alt="" />
-                    <p>Settings</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
+                rounded-l-[5px] px-4 py-2 gap-4 font-allerta-stencil ${showNav ? 'animate-slide-in' : 'animate-slide-out'} ${avatarClicked ? '' : 'hidden'} transition-all`}>
+                {links.map((link, index) => {
+                    return <Link key={index} to={link.path} className='flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]'>
+                        <img className="h-4" src={link.pic} alt={link.name} />
+                        <p>{link.name}</p>
+                    </Link>
+                })}
+                <div className="flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]">
                     <img className="h-4" src={signoutLogo} alt="singout-logo" />
                     <p>Sign out</p>
                 </div>

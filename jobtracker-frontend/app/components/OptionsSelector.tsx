@@ -10,7 +10,9 @@ const OptionsSelector = ({ options, onChange }: OptionsSelectorProps) => {
 
   const handleClick = (option: string) => {
     setSelectedOption(option);
-    onChange(option);
+    if(onChange) {
+      onChange(option);
+    }
   }
   
   return (

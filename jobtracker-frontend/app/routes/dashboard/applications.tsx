@@ -31,13 +31,13 @@ export default function Applications() {
  
     return (
         <main className="flex flex-row gap-8">
-                <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
+                <aside className="flex flex-col sm:items-center sm:min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
                     <form className="mt-5 flex flex-row gap-3 items-center">
                         <input className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
                         <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
                     </form>
                     <div className="flex flex-col gap-5 flex-grow">
-                        <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
+                        <h1 className="hidden sm:block text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
                         <div className="flex flex-col gap-3">
                             {fakeStatuses.map((status, index) => {
                                 return <div key={index} className="flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100">
