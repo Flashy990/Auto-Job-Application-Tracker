@@ -28,14 +28,14 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public JobApplicationDTO createApplication(JobApplicationDTO applicationDTO) {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Printing JobApplicationDTO From JobApplicationServiceImpl: " + applicationDTO.toString());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Printing JobApplicationDTO From JobApplicationServiceImpl: " + applicationDTO.toString());
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         JobApplication application = convertToEntity(applicationDTO);
         JobApplication savedApplication = jobApplicationRepository.save(application);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Generated Id: " + savedApplication.getId());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Generated Id: " + savedApplication.getId());
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         return convertToDTO(savedApplication);
     }
 
