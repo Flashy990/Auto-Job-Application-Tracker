@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 
 export default function Applications() {
     const [windowWidth, setWindowWidth] = useState(0);
+    const [statusClick, setStatusClick] = useState(true);
     const {authUser} = useAuth();
     const navigate = useNavigate();
 
@@ -30,28 +31,39 @@ export default function Applications() {
     },[]);
  
     return (
-        <main className="flex flex-row gap-8">
-                <aside className="flex flex-col sm:items-center sm:min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
-                    <form className="mt-5 flex flex-row gap-3 items-center">
-                        <input className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
-                        <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
-                    </form>
-                    <div className="flex flex-col gap-5 flex-grow">
-                        <h1 className="hidden sm:block text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
-                        <div className="flex flex-col gap-3">
-                            {fakeStatuses.map((status, index) => {
-                                return <div key={index} className="flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100">
-                                    <p className="text-[12px]">{status.name}</p>
-                                    <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
-                                </div>
-                            })}
+        <main className="flex flex-col sm:flex-row gap-8">
+                <aside className="flex flex-row justify-evenly bg-[#BAD8C6]/50 sticky top-0 z-100 sm:static sm:flex-col items-center sm:justify-between sm:px-5">
+                    {/* desktop view */}
+                    <div className="hidden sm:flex flex-col items-center">
+                        <form role='search' className="mt-5 flex flex-row gap-3 items-center">
+                            <input className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
+                            <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
+                        </form>
+                        <div className="flex flex-col gap-5 flex-grow">
+                            <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
+                            <div className="flex flex-col gap-3">
+                                {fakeStatuses.map((status, index) => {
+                                    return <div key={index} className="flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100">
+                                        <p className="text-[12px]">{status.name}</p>
+                                        <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
+                                    </div>
+                                })}
+                            </div>
                         </div>
                     </div>
-                    <button className="font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 px-3 rounded-[10px] mb-5">
+                    <button className="hidden sm:inline font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 px-3 rounded-[10px] mb-5">
                         Manage your applications
                     </button>
+
+                    {/* mobile view */}
+                    <button className="text-[12px] my-2 px-1 hover:bg-secondary rounded-2xl sm:hidden">Check Statuses</button>
+                    <form role="search" className="flex flex-row gap-2 my-2 items-center sm:hidden">
+                        <input className="text-[12px] border-2 w-41 rounded-xl h-[22px] pl-2 placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
+                        <button type='submit' className="h-4 w-4 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
+                    </form>
+                    <button className="text-[12px] hover:bg-secondary rounded-2xl px-1 my-2 sm:hidden">Manage your application</button>
                 </aside>
-                <div className="flex mt-4 flex-col gap-5 items-center">
+                <div className="flex mt-4 flex-col gap-5 items-center z-0">
                     {windowWidth >= 1375 ? 
                        (<div className="flex flex-col text-[16px] gap-3">
                             <div className="flex flex-row gap-5 font-allerta-stencil h-[58px]">

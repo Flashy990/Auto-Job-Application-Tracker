@@ -22,7 +22,7 @@ export default function Settings() {
 
     return (
         <main className="flex flex-row gap-8">
-            <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-7 gap-3 pt-3 bg-[#BAD8C6]/20">
+            <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-7 gap-3 pt-3 bg-[#BAD8C6]/50">
                 {links.map((link, index) => {
                     return <Link to={link.path} onClick={() => setClicked(link.name)} className={`${clicked === link.name ? 'bg-[#90ab9a]' : ''} rounded-xl px-3 w-max`}>{link.name}</Link>
                 })}
