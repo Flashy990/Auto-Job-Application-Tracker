@@ -13,7 +13,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 // For testing and development only
 // For production, maybe I should configure it globally in your WebMvcConfigurer
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class UserController {
 
     private final UserService userService;

@@ -17,7 +17,8 @@ import java.util.Map;
 @RequestMapping("/api/applications")
 // For testing and development only
 // For production, maybe I should configure it globally in your WebMvcConfigurer
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class JobApplicationController {
 
     private final JobApplicationService jobApplicationService;

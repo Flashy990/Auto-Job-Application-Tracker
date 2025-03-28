@@ -10,12 +10,15 @@ import teamjobapptracker.jobapplicationtrackerbackend.model.TestEntity;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.TestRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
 
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/db-test")
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class DatabaseTestController {
 
     @Autowired

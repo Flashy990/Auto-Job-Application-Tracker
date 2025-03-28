@@ -17,10 +17,13 @@ import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.model.User;
 import teamjobapptracker.jobapplicationtrackerbackend.security.JwtService;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
