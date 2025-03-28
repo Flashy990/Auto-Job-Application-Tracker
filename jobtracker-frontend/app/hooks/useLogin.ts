@@ -15,7 +15,7 @@ export const useLogin = () => {
         setLoading(true);
 
         try {
-            const res = await axiosInstance.post('/login/api', {email, password});
+            const res = await axiosInstance.post('/auth/login', {email, password});
     
             if(res.data.error) {
                 throw new Error(res.data.error);

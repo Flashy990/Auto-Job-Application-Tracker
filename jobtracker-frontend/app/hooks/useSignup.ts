@@ -13,7 +13,7 @@ export const useSignup = () => {
 
         setLoading(true);
         try{
-            const res = await axiosInstance.post('signup/api', {email, password});
+            const res = await axiosInstance.post('/auth/register', {email, password});
 
             if(res.data.error) {
                 throw new Error(res.data.error);
