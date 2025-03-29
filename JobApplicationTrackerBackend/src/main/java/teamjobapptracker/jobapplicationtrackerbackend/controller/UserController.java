@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user/profile")
 // For testing and development only
 // For production, maybe I should configure it globally in your WebMvcConfigurer
 // @CrossOrigin(origins = "*")
@@ -25,40 +27,54 @@ public class UserController {
     }
 
     // GET /api/users - Get all users
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
+    // NOT ALLOWED FOR USER. MIGRATE TO ADMIN CONTROLLER IF NEEDED
+    // @GetMapping
+    // public ResponseEntity<List<UserDTO>> getAllUsers() {
+    //     Long userId = getAuthenticatedUserId();
+    //     return ResponseEntity.ok(userService.getAllUsers());
+    // }
 
-    // GET /api/users/{id} - Get user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    // GET /api/user/profile - Get user by ID
+    @GetMapping
+    public ResponseEntity<UserDTO> getUserById() {
+        Long userId = getAuthenticatedUserId();
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 
     // GET /api/users/email/{email} - Get user by email
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(userService.getUserByEmail(email));
-    }
+    // NOT ALLOWED FOR USER. MIGRATE TO ADMIN CONTROLLER IF NEEDED
+    // @GetMapping("/email/{email}")
+    // public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+    //     return ResponseEntity.ok(userService.getUserByEmail(email));
+    // }
 
     // POST /api/users - Create a new user
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    // NOT ALLOWED FOR USER. MIGRATE TO ADMIN CONTROLLER IF NEEDED
+    // @PostMapping
+    // public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    //     UserDTO createdUser = userService.createUser(userDTO);
+    //     return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    // }
+
+    // PUT /api/user/profile - Update an existing user
+    @PutMapping()
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+        Long userId = getAuthenticatedUserId();
+        return ResponseEntity.ok(userService.updateUser(userId, userDTO));
     }
 
-    // PUT /api/users/{id} - Update an existing user
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.updateUser(id, userDTO));
-    }
-
-    // DELETE /api/users/{id} - Delete a user
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    // DELETE /api/user/profile - Delete a user
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteUser() {
+        Long userId = getAuthenticatedUserId();
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    // Helper method to get the authenticated user's ID
+    private Long getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        return userService.getUserByEmail(userEmail).getId();
     }
 }
