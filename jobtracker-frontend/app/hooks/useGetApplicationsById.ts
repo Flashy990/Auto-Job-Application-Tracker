@@ -1,7 +1,6 @@
-import axios, { AxiosError } from "axios";
 import { useState } from "react"
 import { axiosInstance } from "~/libs/axios";
-import type { ErrorResponse } from "./defineError";
+import { handleApiError, type ErrorResponse } from "./handleError";
 import toast from "react-hot-toast";
 
 const useGetApplicationsById = () => {
@@ -15,12 +14,13 @@ const useGetApplicationsById = () => {
             
             return res.data;
         } catch(error) {
-            if(axios.isAxiosError(error)) {
-                const axiosError = error as AxiosError<ErrorResponse>;
-                console.error(axiosError.response?.data.error, axiosError.response?.data.message);
-                toast.error(`Failed to get application(id: ${id})`);
+            const {statusCode, message, details} = handleApiError(error);
+            if(message === 'Unknown error') {
+                console.log(statusCode, details);
+                toast.error('Unexpectd error occurred');
             } else {
-                toast.error('Unexpected error occurred');
+                console.log(statusCode, message, details);
+                toast.error(`Failed to get the application(id: ${id})`);
             }
         } finally {
             setLoading(false);

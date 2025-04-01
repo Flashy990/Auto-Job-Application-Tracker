@@ -1,8 +1,7 @@
-import axios, { AxiosError } from "axios";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { axiosInstance } from "~/libs/axios";
-import type { ErrorResponse } from "./defineError";
+import { handleApiError, type ErrorResponse } from "./handleError";
 
 export interface JobApplication {
     companyName: string;
@@ -34,12 +33,13 @@ const useCreateApplication = () => {
                 toast.success('Successfully created the new job application.');
             }
         } catch(error) {
-            if(axios.isAxiosError(error)) {
-                const axiosError = error as AxiosError<ErrorResponse>;
-                console.error(axiosError.response?.data.error, axiosError.response?.data.message);
-                toast.error('Failed to create the new job application');
+            const {statusCode, message, details} = handleApiError(error);
+            if(message === 'Unknown error') {
+                console.log(statusCode, details);
+                toast.error('Unexpectd error occurred');
             } else {
-                toast.error('Unexpected error occurred');
+                console.log(statusCode, message, details);
+                toast.error('Failed to create the new application');
             }
         } finally {
             setLoading(false);

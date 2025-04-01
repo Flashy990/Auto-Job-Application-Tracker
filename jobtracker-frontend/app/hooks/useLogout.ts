@@ -1,9 +1,8 @@
-import axios, { AxiosError } from "axios";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
-import type { ErrorResponse } from "./defineError";
+import { handleApiError, type ErrorResponse } from "./handleError";
 
 const useLogout = () => {
     const [loading, setLoading] = useState(false);
@@ -16,12 +15,13 @@ const useLogout = () => {
             
             setAuthUser(null);
         } catch(error) {
-            if(axios.isAxiosError(error)) {
-                const axiosError = error as AxiosError<ErrorResponse>;
-                console.error(axiosError.response?.data.error, axiosError.response?.data.message);
-                toast.error('Failed to log out');
+            const {statusCode, message, details} = handleApiError(error);
+            if(message === 'Unknown error') {
+                console.log(statusCode, details);
+                toast.error('Unexpectd error occurred');
             } else {
-                toast.error('An unexpected error occurred');
+                console.log(statusCode, message, details);
+                toast.error('Failed to logout');
             }
         } finally {
             setLoading(false);
