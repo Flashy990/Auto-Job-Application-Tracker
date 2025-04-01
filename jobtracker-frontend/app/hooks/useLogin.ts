@@ -1,9 +1,11 @@
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
+import type { ErrorResponse } from "./defineError";
 
-export const useLogin = () => {
+const useLogin = () => {
     const [loading, setLoading] = useState(false);
     const {setAuthUser} = useAuth();
 
@@ -17,17 +19,15 @@ export const useLogin = () => {
         try {
             const res = await axiosInstance.post('/auth/login', {email, password});
     
-            if(res.data.error) {
-                throw new Error(res.data.error);
-            }
-    
             setAuthUser(res.data); // change
             toast.success('Logged in successfully');
             return true;
 
         } catch(error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
+            if (axios.isAxiosError(error)) {
+                const axiosError = error as AxiosError<ErrorResponse>;
+                console.error(axiosError.response?.data.error, axiosError.response?.data.message);
+                toast.error("Failed to login, try later");
             } else {
                 toast.error('An unexpected error occurred');
             }
@@ -48,3 +48,5 @@ function handleInputError(email:string, password: string) {
 
     return true;
 }
+
+export default useLogin;

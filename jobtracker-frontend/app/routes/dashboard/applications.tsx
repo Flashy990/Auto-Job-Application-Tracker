@@ -7,8 +7,14 @@ import { useNavigate } from "react-router";
 export default function Applications() {
     const [windowWidth, setWindowWidth] = useState(0);
     const [statusClick, setStatusClick] = useState(true);
+    const [curPage, setCurPage] = useState(1);
     const {authUser} = useAuth();
     const navigate = useNavigate();
+
+    const LG_SCREEN = 1375;
+    const APPLICATIONS_PER_PAGE = 9;
+    const PAGES_DISPLAY = 5;
+    let pages = Math.ceil(fakeApplications.length / APPLICATIONS_PER_PAGE);
 
     // useEffect(() => {
     //     if(!authUser) {
@@ -29,12 +35,28 @@ export default function Applications() {
             window.removeEventListener('resize', handleResize);
         }
     },[]);
+
+    const clickPrev = () => {
+        if(curPage > 1) {
+            setCurPage(prev => prev - 1);
+        }
+    }
+
+    const clickNext = () => {
+        if(curPage < pages) {
+            setCurPage(prev => prev + 1);
+        }
+    }
+
+    const clickPage = (pageNum: number) => {
+        setCurPage(pageNum);
+    }
  
     return (
         <main className="flex flex-col sm:flex-row gap-8">
                 <aside className="flex flex-row justify-evenly bg-[#BAD8C6]/50 sticky top-0 z-100 sm:static sm:flex-col items-center sm:justify-between sm:px-5">
                     {/* desktop view */}
-                    <div className="hidden sm:flex flex-col items-center">
+                    <div className="hidden sm:flex flex-col items-center min-h-[calc(100vh-140px)]">
                         <form role='search' className="mt-5 flex flex-row gap-3 items-center">
                             <input className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
                             <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
@@ -63,8 +85,8 @@ export default function Applications() {
                     </form>
                     <button className="text-[12px] hover:bg-secondary rounded-2xl px-1 my-2 sm:hidden">Manage your application</button>
                 </aside>
-                <div className="flex mt-4 flex-col gap-5 items-center z-0">
-                    {windowWidth >= 1375 ? 
+                <div className="flex mt-4 flex-col gap-5 items-center z-0 justify-between">
+                    {windowWidth >= LG_SCREEN ? 
                        (<div className="flex flex-col text-[16px] gap-3">
                             <div className="flex flex-row gap-5 font-allerta-stencil h-[58px]">
                                 <div className="flex bg-[#BAD8C6] w-[43px] rounded-[15px] border-3 items-center justify-center">No.</div>
@@ -78,8 +100,8 @@ export default function Applications() {
                                     <h1>Notes</h1>
                                 </div>
                             </div>
-                        {
-                            fakeApplications.map((fakeApplication, index) => {
+                        {curPage * 9  < fakeApplications.length ? (
+                            fakeApplications.slice((curPage - 1) * 9, curPage * 9).map((fakeApplication, index) => {
                                 return <div key={index} className="flex flex-row gap-5 h-[50px] text-[15px]">
                                     <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{fakeApplication.id}</div>
                                     <div className="flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
@@ -92,44 +114,82 @@ export default function Applications() {
                                         <h1 className="w-[36px]">{fakeApplication.notes}</h1>
                                     </div>
                                 </div>
-                            } )
-                        }
+                            }
+                        ) ) : (fakeApplications.slice((curPage - 1) * 9, fakeApplications.length).map((fakeApplication, index) => {
+                            return <div key={index} className="flex flex-row gap-5 h-[50px] text-[15px]">
+                                <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{fakeApplication.id}</div>
+                                <div className="flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
+                                    <h1 className="text-[12px] w-[150px]">{fakeApplication.jobPosition}</h1>
+                                    <h1 className="w-[100px]">{fakeApplication.company}</h1>
+                                    <h1 className="w-[135px]">{fakeApplication.salaryRange}</h1>
+                                    <h1 className="w-[110px]">{fakeApplication.location}</h1>
+                                    <h1 className="w-[90px]">{fakeApplication.status}</h1>
+                                    <h1 className="w-[110px]">{fakeApplication.documents.join(', ')}</h1>
+                                    <h1 className="w-[36px]">{fakeApplication.notes}</h1>
+                                </div>
+                            </div>
+                        }))}
                         </div>)
                     : 
                     (<div className="flex flex-wrap gap-5 z-0">
-                    {fakeApplications.map((fakeApplication, index) => {
-                    return <div key={index} className="relative w-60">
-                            <div className="flex flex-row font-allerta-stencil text-[18px] absolute -top-3.5 left-2 gap-3">
-                                <p className="bg-gray-100 w-fit">{fakeApplication.company}</p>
-                                <p className="bg-gray-100 w-fit text-[#BAD8C6]">{fakeApplication.status}</p>
+                    { curPage * 9  < fakeApplications.length ? (
+                        fakeApplications.slice((curPage - 1) * 9, curPage * 9).map((fakeApplication, index) => {
+                            return <div key={index} className="relative w-60">
+                                    <div className="flex flex-row font-allerta-stencil text-[18px] absolute -top-3.5 left-2.5 gap-2">
+                                        <p className="bg-gray-100 w-fit">{fakeApplication.id}</p>
+                                        <p className="bg-gray-100 w-fit">{fakeApplication.company}</p>
+                                        <p className="bg-gray-100 w-fit text-[#BAD8C6]">{fakeApplication.status}</p>
+                                    </div>
+                                    <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3">
+                                        <p className="border-b-2">{fakeApplication.jobPosition}</p>
+                                        <p className="border-b-2">{fakeApplication.salaryRange}</p>
+                                        <p className="border-b-2">{fakeApplication.location}</p>
+                                        <p className="border-b-2">{fakeApplication.documents.join(', ')}</p>
+                                        <p className="w-56">Overflow content is clipped at the element's 
+                                            padding box, and overflow content can be scrolled into view using 
+                                            scroll bars. Unlike scroll, user agents display scroll bars only if 
+                                            the content is overflowing. If content fits inside the element's padding 
+                                            box, it looks the same as with visible but still establishes a new formatting 
+                                            context. The element box is a scroll container.</p>
+                                    </div>
+                                </div>
+                           })
+                    ) :
+                    (fakeApplications.slice((curPage - 1) * 9, fakeApplications.length).map((fakeApplication, index) => {
+                        return <div key={index} className="relative w-60">
+                                <div className="flex flex-row font-allerta-stencil text-[18px] absolute -top-3.5 left-2 gap-3">
+                                    <p className="bg-gray-100 w-fit">{fakeApplication.id}</p>
+                                    <p className="bg-gray-100 w-fit">{fakeApplication.company}</p>
+                                    <p className="bg-gray-100 w-fit text-[#BAD8C6]">{fakeApplication.status}</p>
+                                </div>
+                                <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3">
+                                    <p className="border-b-2">{fakeApplication.jobPosition}</p>
+                                    <p className="border-b-2">{fakeApplication.salaryRange}</p>
+                                    <p className="border-b-2">{fakeApplication.location}</p>
+                                    <p className="border-b-2">{fakeApplication.documents.join(', ')}</p>
+                                    <p className="w-56">Overflow content is clipped at the element's 
+                                        padding box, and overflow content can be scrolled into view using 
+                                        scroll bars. Unlike scroll, user agents display scroll bars only if 
+                                        the content is overflowing. If content fits inside the element's padding 
+                                        box, it looks the same as with visible but still establishes a new formatting 
+                                        context. The element box is a scroll container.</p>
+                                </div>
                             </div>
-                            <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3">
-                                <p className="border-b-2">{fakeApplication.jobPosition}</p>
-                                <p className="border-b-2">{fakeApplication.salaryRange}</p>
-                                <p className="border-b-2">{fakeApplication.location}</p>
-                                <p className="border-b-2">{fakeApplication.documents.join(', ')}</p>
-                                <p className="w-56">Overflow content is clipped at the element's 
-                                    padding box, and overflow content can be scrolled into view using 
-                                    scroll bars. Unlike scroll, user agents display scroll bars only if 
-                                    the content is overflowing. If content fits inside the element's padding 
-                                    box, it looks the same as with visible but still establishes a new formatting 
-                                    context. The element box is a scroll container.</p>
-                            </div>
-                        </div>
-                   })}   
-                    </div>
-                    )}
+                       }))}   
+                    </div>)}
                     <div className="flex flex-row gap-7 items-center mb-5">
-                        <h1>Previous</h1>
-                        {/* static pagination */}
+                        <button onClick={clickPrev} className="cursor-pointer">Previous</button>
+                        {/* implementing pagination ... */}
                         <div className="flex flex-row gap-6 items-center text-center ">
-                            <p className="border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7">1</p>
-                            <p className="border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7">2</p>
-                            <p className="border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7">3</p>
-                            <p className="border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7">4</p>
-                            <p className="border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7">5</p>
+                            {pages - curPage + 1 < PAGES_DISPLAY ? (
+                                Array.from({length: pages - curPage + 1}).map((_, index) => {
+                                    return <button className={`border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7 cursor-pointer`} onClick={() => clickPage(curPage + index)}>{curPage + index}</button>
+                                })
+                            ) : (Array.from({length: 5}).map((_,index) => {
+                                return <button className={`border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7 cursor-pointer`} onClick={() => clickPage(curPage + index)}>{curPage + index}</button>
+                            }))}
                         </div>
-                        <h1>Next</h1>
+                        <button onClick={clickNext} className="cursor-pointer">Next</button>
                     </div>
                 </div>
             </main>

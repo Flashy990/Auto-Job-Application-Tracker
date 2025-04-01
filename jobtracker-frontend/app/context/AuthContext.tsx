@@ -26,6 +26,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     },[]);
 
     const checkLoginStatus = async () => {
+
         setLoading(true);
         try {
             const res = await axiosInstance.get('/auth/unknown'); // url unknown now

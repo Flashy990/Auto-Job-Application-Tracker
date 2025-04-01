@@ -1,5 +1,4 @@
 import {
-  href,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -14,7 +13,8 @@ import { Toaster } from 'react-hot-toast';
 
 import birdIcon from "/bird-icon.svg";
 import { AuthProvider } from "./context/AuthContext";
-import { EmailProvider } from "./context/SignupEmailContext";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,12 +44,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <AuthProvider>
-          <EmailProvider>
-            <div><Toaster /></div>
-            {children}
-          </EmailProvider>
-        </AuthProvider>
+        <Provider store={store}>
+          <AuthProvider>
+              <div><Toaster /></div>
+              {children}
+          </AuthProvider>
+          </Provider>
         <ScrollRestoration />
         <Scripts />
       </body>
