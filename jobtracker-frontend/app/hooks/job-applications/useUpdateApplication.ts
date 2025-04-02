@@ -2,7 +2,7 @@ import { useState } from "react"
 import { axiosInstance } from "~/libs/axios";
 import type { JobApplication } from "./useCreateApplication";
 import toast from "react-hot-toast";
-import { handleApiError, type ErrorResponse } from "./handleError";
+import { handleApiError, type ErrorResponse } from "../handleError";
 
 const useUpdateApplication = () => {
     const [loading, setLoading] = useState(false);

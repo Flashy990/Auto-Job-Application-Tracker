@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import useSignup from "~/hooks/useSignup";
+import useSignup from "~/hooks/auth/useSignup";
 import type { EmailState } from "~/store/signupEmailSlice";
 
 export default function Password() {

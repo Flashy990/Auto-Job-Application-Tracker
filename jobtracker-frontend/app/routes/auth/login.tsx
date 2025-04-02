@@ -1,4 +1,4 @@
-import useLogin from "~/hooks/useLogin";
+import useLogin from "~/hooks/auth/useLogin";
 import googleLogo from "/images/Google_Icons.webp";
 import linkedinLogo from "/images/circle-linkedin.webp";
 import { useState, type FormEvent } from "react";

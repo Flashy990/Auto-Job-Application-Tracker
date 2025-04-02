@@ -1,7 +1,7 @@
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { axiosInstance } from "~/libs/axios";
-import { handleApiError, type ErrorResponse } from "./handleError";
+import { handleApiError, type ErrorResponse } from "../handleError";
 
 export interface JobApplication {
     companyName: string;

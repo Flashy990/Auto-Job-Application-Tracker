@@ -1,19 +1,18 @@
 import { useState } from "react"
-import toast from "react-hot-toast";
-import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
-import { handleApiError, type ErrorResponse } from "./handleError";
+import { handleApiError, type ErrorResponse } from "../handleError";
+import toast from "react-hot-toast";
 
-const useLogout = () => {
+const useGetApplicationsById = () => {
     const [loading, setLoading] = useState(false);
-    const {setAuthUser} = useAuth();
 
-    const logout = async () => {
+    const getApplicationsById = async (id: number) => {
         setLoading(true);
+
         try{
-            const res = await axiosInstance.post('/logout/api');
+            const res = await axiosInstance.get(`/applications/${id}`);
             
-            setAuthUser(null);
+            return res.data;
         } catch(error) {
             const {statusCode, message, details} = handleApiError(error);
             if(message === 'Unknown error') {
@@ -21,14 +20,14 @@ const useLogout = () => {
                 toast.error('Unexpectd error occurred');
             } else {
                 console.log(statusCode, message, details);
-                toast.error('Failed to logout');
+                toast.error(`Failed to get the application(id: ${id})`);
             }
         } finally {
             setLoading(false);
         }
     }
 
-    return {loading, logout};
+    return {loading, getApplicationsById};
 }
 
-export default useLogout;
+export default useGetApplicationsById;
