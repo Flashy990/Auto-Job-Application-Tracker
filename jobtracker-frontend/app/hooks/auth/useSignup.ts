@@ -2,8 +2,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
+import { handleApiError, type ErrorResponse } from "../handleError";
 
-export const useSignup = () => {
+const useSignup = () => {
     const [loading, setLoading] = useState(false);
     const {setAuthUser} = useAuth();
 
@@ -15,17 +16,16 @@ export const useSignup = () => {
         try{
             const res = await axiosInstance.post('/auth/register', {email, password});
 
-            if(res.data.error) {
-                throw new Error(res.data.error);
-            }
-
-            setAuthUser(res.data); // change
+            setAuthUser(res.data);
             return true;
         } catch(error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
+            const {statusCode, message, details} = handleApiError(error);
+            if(message === 'Unknown error') {
+                console.log(statusCode, details);
+                toast.error('Unexpectd error occurred');
             } else {
-                toast.error('An unexpected error occured');
+                console.log(statusCode, message, details);
+                toast.error('Failed to sign up');
             }
             return false;
         } finally {
@@ -59,3 +59,5 @@ function handleInput(email:string, password: string, confirmPassword: string) {
 
     return true;
 };
+
+export default useSignup;

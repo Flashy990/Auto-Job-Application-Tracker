@@ -3,10 +3,12 @@ import googleLogo from "/images/Google_Icons.webp";
 import linkedinLogo from "/images/circle-linkedin.webp";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
-import { useEmail } from "~/context/SignupEmailContext";
+import { useDispatch } from "react-redux";
+import { setEmail, type EmailState } from "~/store/signupEmailSlice";
 
 export default function Signup() {
-    const {signupEmail, setSignupEmail} = useEmail();
+    const [semail, setSemail] = useState('');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const validateEmail = (email: string) => {
@@ -16,10 +18,11 @@ export default function Signup() {
 
     const handleSumbit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const validEmail = validateEmail(signupEmail);
+        const validEmail = validateEmail(semail);
         if(!validEmail) {
             toast.error('Invalid email');
         } else {
+            dispatch(setEmail(semail));
             navigate('/signup/password');
         }
     }
@@ -37,7 +40,7 @@ export default function Signup() {
             </div>
             <p>or sign up with your email</p>
             <form className="flex flex-col items-center gap-5" onSubmit={handleSumbit}>
-                <input type="text" placeholder="Email" value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} className="border-2 h-8 pl-2 rounded-[5px]"/>
+                <input type="text" placeholder="Email" value={semail} onChange={(e) => setSemail(e.target.value)} className="border-2 h-8 pl-2 rounded-[5px]"/>
                 <button type="submit" className="bg-[#FFC457] text-gray-900 w-fit px-4 py-1 rounded-2xl cursor-pointer">Get Started</button>
             </form>
             <p>Already a memeber? <u className="cursor-pointer" onClick={() => navigate('/login')}>Sign in</u></p>

@@ -1,11 +1,10 @@
-import axios from "axios";
-import { T } from "node_modules/react-router/dist/development/fog-of-war-BQyvjjKg.mjs";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
+import { handleApiError, type ErrorResponse } from "../handleError";
 
-export const useLogout = () => {
+const useLogout = () => {
     const [loading, setLoading] = useState(false);
     const {setAuthUser} = useAuth();
 
@@ -13,16 +12,16 @@ export const useLogout = () => {
         setLoading(true);
         try{
             const res = await axiosInstance.post('/logout/api');
-            if(res.data.error) {
-                throw new Error(res.data.error);
-            }
-
+            
             setAuthUser(null);
         } catch(error) {
-            if(error instanceof Error) {
-                toast.error(error.message);
+            const {statusCode, message, details} = handleApiError(error);
+            if(message === 'Unknown error') {
+                console.log(statusCode, details);
+                toast.error('Unexpectd error occurred');
             } else {
-                toast.error('An unexpected error occurred');
+                console.log(statusCode, message, details);
+                toast.error('Failed to logout');
             }
         } finally {
             setLoading(false);
@@ -31,3 +30,5 @@ export const useLogout = () => {
 
     return {loading, logout};
 }
+
+export default useLogout;

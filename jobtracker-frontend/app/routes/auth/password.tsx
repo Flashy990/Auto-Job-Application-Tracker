@@ -1,14 +1,16 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { useEmail } from "~/context/SignupEmailContext";
-import { useSignup } from "~/hooks/useSignup";
+import useSignup from "~/hooks/auth/useSignup";
+import type { EmailState } from "~/store/signupEmailSlice";
 
 export default function Password() {
-    const {signupEmail} = useEmail();
+    const signupEmail = useSelector((state: EmailState) => state.signupEmail.value);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const {loading, signup} = useSignup();
     const navigate = useNavigate();
+   
 
     useEffect(() => {
         if(!signupEmail) {

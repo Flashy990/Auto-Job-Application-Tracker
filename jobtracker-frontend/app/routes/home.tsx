@@ -2,8 +2,6 @@ import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import { useAuth } from "~/context/AuthContext";
 import maleAvatar from '/images/male-avatar.png';
-import { useEmail } from "~/context/SignupEmailContext";
-import { ToggleSwitch } from "~/components/ToggleSwitch";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,12 +11,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const {signupEmail, setSignupEmail} = useEmail();
   const {authUser} = useAuth();
-
-  if(signupEmail) {
-    setSignupEmail('');
-  }
 
   return (
   <div>

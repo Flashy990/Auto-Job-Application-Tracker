@@ -23,4 +23,5 @@ export default [
             ])
         ]),
     ]),
+    route("/*", "routes/error/notFound.tsx"),
 ] satisfies RouteConfig;
