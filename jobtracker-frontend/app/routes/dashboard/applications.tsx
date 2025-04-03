@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 export default function Applications() {
     const [windowWidth, setWindowWidth] = useState(0);
     const [statusClick, setStatusClick] = useState(true);
+    const [isManaging, setIsManaging] = useState(false);
     const [curPage, setCurPage] = useState(1);
     const {authUser} = useAuth();
     const navigate = useNavigate();
@@ -73,7 +74,7 @@ export default function Applications() {
                             </div>
                         </div>
                     </div>
-                    <button className="hidden sm:inline font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 px-3 rounded-[10px] mb-5">
+                    <button onClick={() => setIsManaging(!isManaging)} className={`hidden sm:inline font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 px-3 rounded-[10px] mb-5 cursor-pointer hover:bg-secondary ${isManaging ? 'bg-secondary' : ''}`}>
                         Manage your applications
                     </button>
 
@@ -102,8 +103,8 @@ export default function Applications() {
                             </div>
                         {curPage * 9  < fakeApplications.length ? (
                             fakeApplications.slice((curPage - 1) * 9, curPage * 9).map((fakeApplication, index) => {
-                                return <div key={index} className="flex flex-row gap-5 h-[50px] text-[15px]">
-                                    <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{fakeApplication.id}</div>
+                                return <div key={index} onClick={() => {if(isManaging) navigate(`/dashboard/edit-application/${fakeApplication.id}`)}} className={`flex flex-row gap-5 h-[50px] text-[15px] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOne' : 'animate-shakeTwo')+' cursor-pointer' : '' } `}>
+                                    <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{(curPage - 1) * 9 + index + 1}</div>
                                     <div className="flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
                                         <h1 className="text-[12px] w-[150px]">{fakeApplication.jobPosition}</h1>
                                         <h1 className="w-[100px]">{fakeApplication.company}</h1>
@@ -116,8 +117,8 @@ export default function Applications() {
                                 </div>
                             }
                         ) ) : (fakeApplications.slice((curPage - 1) * 9, fakeApplications.length).map((fakeApplication, index) => {
-                            return <div key={index} className="flex flex-row gap-5 h-[50px] text-[15px]">
-                                <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{fakeApplication.id}</div>
+                            return <div key={index} className={`flex flex-row gap-5 h-[50px] text-[15px] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOne' : 'animate-shakeTwo')+' cursor-pointer' : '' }`}>
+                                <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{(curPage - 1) * 9 + index + 1}</div>
                                 <div className="flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
                                     <h1 className="text-[12px] w-[150px]">{fakeApplication.jobPosition}</h1>
                                     <h1 className="w-[100px]">{fakeApplication.company}</h1>
@@ -134,9 +135,9 @@ export default function Applications() {
                     (<div className="flex flex-wrap gap-5 z-0">
                     { curPage * 9  < fakeApplications.length ? (
                         fakeApplications.slice((curPage - 1) * 9, curPage * 9).map((fakeApplication, index) => {
-                            return <div key={index} className="relative w-60">
+                            return <div key={index} className={`relative w-60 ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
                                     <div className="flex flex-row font-allerta-stencil text-[18px] absolute -top-3.5 left-2.5 gap-2">
-                                        <p className="bg-gray-100 w-fit">{fakeApplication.id}</p>
+                                        <p className="bg-gray-100 w-fit">{(curPage - 1) * 9 + index + 1}</p>
                                         <p className="bg-gray-100 w-fit">{fakeApplication.company}</p>
                                         <p className="bg-gray-100 w-fit text-[#BAD8C6]">{fakeApplication.status}</p>
                                     </div>
@@ -156,9 +157,9 @@ export default function Applications() {
                            })
                     ) :
                     (fakeApplications.slice((curPage - 1) * 9, fakeApplications.length).map((fakeApplication, index) => {
-                        return <div key={index} className="relative w-60">
+                        return <div key={index} className={`relative w-60 ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
                                 <div className="flex flex-row font-allerta-stencil text-[18px] absolute -top-3.5 left-2 gap-3">
-                                    <p className="bg-gray-100 w-fit">{fakeApplication.id}</p>
+                                    <p className="bg-gray-100 w-fit">{(curPage - 1) * 9 + index + 1}</p>
                                     <p className="bg-gray-100 w-fit">{fakeApplication.company}</p>
                                     <p className="bg-gray-100 w-fit text-[#BAD8C6]">{fakeApplication.status}</p>
                                 </div>

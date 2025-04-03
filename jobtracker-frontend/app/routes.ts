@@ -13,7 +13,7 @@ export default [
         layout("routes/dashboard/layout.tsx", [
             route("profile", "routes/dashboard/profile.tsx"),
             route("applications", "routes/dashboard/applications.tsx"),
-            route("edit-application", "routes/dashboard/applicationEdit.tsx"),
+            route("edit-application/:id", "routes/dashboard/applicationEdit.tsx"),
             ...prefix("settings", [
                 layout("routes/dashboard/settings.tsx", [
                     route("profile", "routes/dashboard/settings/profile.tsx"),
