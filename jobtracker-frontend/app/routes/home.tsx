@@ -20,12 +20,12 @@ export default function Home() {
 
   return (
   <div>
-    <header className="flex flex-row items-center pt-3 border-b-1 pb-3">
+    <header className="flex flex-row items-center py-1 border-b-1 h-[11vh]">
       <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl w-[15vw] md:text-5xl xl:text-6xl pl-4 text-[#BAD8C6]">JAT</h1>
       {/* unsolved: header layout design consistency */}
-      <h1 className={`text-2xl w-[70vw] lg:text-3xl xl:text-5xl font-allerta-stencil text-center self-center`}>Job Application Tracker</h1>
+      <h1 className={`text-2xl w-[70vw] lg:text-4xl xl:text-5xl font-allerta-stencil text-center self-center`}>Job Application Tracker</h1>
       {authUser ?   
-        ( <div className="w-[15vw] md:pl-[6vw] flex flex-col items-center self-end cursor-pointer">
+        ( <div className="w-[15vw] md:pl-[6vw] flex flex-col items-center self-center cursor-pointer">
             <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 md:h-9 md:min-w-9"/>
             <h1 className="font-akaya-kanadaka text-[11px] lg:text-[14px]">John Doe</h1>
           </div>) :

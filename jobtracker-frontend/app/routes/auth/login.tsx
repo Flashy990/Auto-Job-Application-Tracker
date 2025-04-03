@@ -18,7 +18,7 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center gap-6 mt-[15vh]">
+        <div className="flex flex-col items-center gap-6 mt-[19vh]">
             <h1 className="font-allerta-stencil text-[30px]">Login</h1>
             <form className="flex flex-col items-center gap-3" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="border-2 h-8 px-2 rounded-[5px]"/>
@@ -32,15 +32,6 @@ export default function Login() {
                      : 'Log in'}
                 </button>
             </form>
-            <p>or</p>
-            <div className="flex flex-row items-center px-7 gap-5 bg-[#35BEFD] rounded-3xl">
-                <img className="h-8 bg-white rounded-4xl" src={googleLogo} alt="google-logo" />
-                <p className="text-[23px] text-gray-900">Continue with Google</p>
-            </div>
-            <div className="flex flex-row items-center pl-7 pr-4 gap-5 bg-[#028BCA] rounded-3xl">
-                <img className="h-8" src={linkedinLogo} alt="LinkedIn-logo" />
-                <p className="text-[23px] text-gray-900">Continue with LinkedIn</p>
-            </div>
             <p>Not a member yet? <u className="cursor-pointer" onClick={() => navigate('/signup')}>Create an account</u></p>
         </div>
     );
