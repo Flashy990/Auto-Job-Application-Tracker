@@ -53,7 +53,11 @@ export default function ApplicationEdit() {
                             <textarea id="notes" className="border-3 block w-100 h-50 rounded-[10px]"/>
                         </div>
                     </div>
-                    <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px]">Submit</button>
+                    <div className="flex flex-row gap-5">
+                        <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px]">Submit</button>
+                        <button type='button' className="flex border-3 w-fit px-2 rounded-[10px]">Delete</button>
+                    </div>
+                   
                 </form>
             </div>
         </main>
