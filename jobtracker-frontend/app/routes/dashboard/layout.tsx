@@ -83,15 +83,15 @@ export default function DashboardLayout() {
     return (
         <>
             <header ref={headerRef} className="flex flex-row items-center pt-3 border-b-1 pb-3">
-                <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl sm:text-5xl md:text-6xl ml-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
-                <h1 className="text-2xl sm:text-4xl md:text-5xl font-allerta-stencil flex-grow text-center self-center pr-[125.64px]">Job Application Tracker</h1>
-                <div onClick={clickAvatar} ref={avatarRef} className="mr-4 flex flex-col items-center self-end cursor-pointer">
-                    <img src={maleAvatar} alt="avatar" className="h-9 min-w-9"/>
-                    <h1 className="font-akaya-kanadaka text-[14px]">John Doe</h1>
+                <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl w-[15vw] md:text-5xl xl:text-6xl pl-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
+                <h1 className="text-2xl w-[70vw] lg:text-3xl xl:text-5xl font-allerta-stencil text-center self-center">Job Application Tracker</h1>
+                <div onClick={clickAvatar} ref={avatarRef} className="w-[15vw] md:pl-[6vw] flex flex-col items-center self-end cursor-pointer">
+                    <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 md:h-9 md:min-w-9"/>
+                    <h1 className="font-akaya-kanadaka text-[11px] lg:text-[14px]">John Doe</h1>
                 </div>
             </header>
-            <nav ref={navRef} style={{top: `${headerHeight}px`}} className={`absolute w-fit flex flex-col right-0 z-100 bg-[#BAD8C6] 
-                rounded-l-[5px] px-4 py-2 gap-4 font-allerta-stencil ${showNav ? 'animate-slide-in' : 'animate-slide-out'} ${avatarClicked ? '' : 'hidden'} transition-all`}>
+            <nav ref={navRef} style={{top: `${headerHeight}px`}} className={`absolute w-fit flex flex-col right-0 z-20 bg-[#BAD8C6] 
+                rounded-l-[5px] px-2 py-1.5 md:px-4 md:py-2 gap-2 md:gap-4 font-allerta-stencil text-[14px] md:text-[16px] ${showNav ? 'animate-slide-in' : 'animate-slide-out'} ${avatarClicked ? '' : 'hidden'} transition-all`}>
                 {links.map((link, index) => {
                     return <Link key={index} to={link.path} className='flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]'>
                         <img className="h-4" src={link.pic} alt={link.name} />

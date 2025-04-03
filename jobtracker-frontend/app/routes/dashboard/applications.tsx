@@ -54,7 +54,7 @@ export default function Applications() {
  
     return (
         <main className="flex flex-col sm:flex-row gap-8">
-                <aside className="flex flex-row justify-evenly bg-[#BAD8C6]/50 sticky top-0 z-100 sm:static sm:flex-col items-center sm:justify-between sm:px-5">
+                <aside className="flex flex-row justify-evenly bg-[#BAD8C6]/50 sticky top-0 z-10 sm:static sm:flex-col items-center sm:justify-between sm:px-5">
                     {/* desktop view */}
                     <div className="hidden sm:flex flex-col items-center min-h-[calc(100vh-140px)]">
                         <form role='search' className="mt-5 flex flex-row gap-3 items-center">
