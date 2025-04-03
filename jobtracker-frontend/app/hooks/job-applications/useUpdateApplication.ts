@@ -22,12 +22,12 @@ const useUpdateApplication = () => {
             }
 
         } catch(error) {
-            const {statusCode, message, details} = handleApiError(error);
+            const {message, details} = handleApiError(error);
             if(message === 'Unknown error') {
-                console.log(statusCode, details);
+                console.log(details);
                 toast.error('Unexpectd error occurred');
             } else {
-                console.log(statusCode, message, details);
+                console.log(details);
                 toast.error(`Failed to update your application(id: ${id})`);
             }
         } finally {

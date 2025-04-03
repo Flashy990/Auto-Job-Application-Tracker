@@ -15,19 +15,16 @@ export const handleApiError = (error : unknown) => {
 
         if(axiosError.response) {
             return {
-                statusCode: axiosError.response.status,
                 message: axiosError.response.data.message || 'Server error',
                 details: axiosError.response.data
             }
         } else if (axiosError.request) {
             return {
-                statusCode: 0,
                 message: 'No response from server',
                 details: axiosError.request
             }
         } else {
             return {
-                statusCode: 0,
                 message: "Request configuration error",
                 details: axiosError.message
             }
@@ -35,7 +32,6 @@ export const handleApiError = (error : unknown) => {
     }
 
     return {
-        statusCode: 0,
         message: 'Unknown error',
         details: String(error)
     }

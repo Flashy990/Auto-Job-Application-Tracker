@@ -6,6 +6,7 @@ export default function FadeInSection({children}: {children: ReactNode}) {
 
     const belowViewport = (el: HTMLDivElement) => {
         const rect = el.getBoundingClientRect();
+        
         return rect.top > window.innerHeight;
     }
 
