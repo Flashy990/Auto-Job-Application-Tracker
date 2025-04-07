@@ -1,17 +1,46 @@
 import OptionsSelector from "~/components/OptionsSelector";
 import backLogo from "/images/arrow.png";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import type { ApplicationIdState } from "~/store/applicationIdSlice";
+import useGetApplicationsById from "~/hooks/job-applications/useGetApplicationsById";
+import { useNavigate } from "react-router";
 
 export default function ApplicationEdit() {
     const [status, setStatus] = useState('');
+    const [application, setApplication] = useState(null);
     const statusOptions = ['Applying', 'Applied', 'Interviewing', 'Offered', 'Rejected'];
+    const applicationId = useSelector((state: ApplicationIdState) => state.applicationId.value);
+    const {loading, getApplicationById} = useGetApplicationsById();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchApplication = async () => {
+            if(applicationId !== 'new') {
+                const application = await getApplicationById(applicationId);
+                if(application) {
+                    setApplication(application);
+                }
+            }
+        }
+        if(!applicationId) {
+            navigate('/dashboard/applications');
+        } else {
+            fetchApplication(); 
+        }
+    },[applicationId]);
 
     return (
         <main className="flex flex-row gap-8">
             <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
-                <h1 className="text-[32px] w-[208px] mt-8 flex-grow">You're adding a new application .&nbsp;.&nbsp;.</h1>
+                <h1 className="text-[32px] w-[208px] mt-8 flex-grow">
+                    {applicationId === 'new' ? 
+                    "You're adding a new application . . ." : 
+                    "Your're editing an application . . ."}
+                </h1>
                 <button className="flex flex-row gap-2 items-center border-3 rounded-[10px] px-2 border-black/30 mb-5"><img className="h-3" src={backLogo} alt="arrow" />Back</button>
             </aside>
+            <Suspense fallback={<div className="text-2xl">Loading your job application</div>}>
             <div className="mt-4">
                 <form role='form' action="" className="flex flex-col gap-6">
                     <div className="flex flex-col gap-3">
@@ -60,6 +89,7 @@ export default function ApplicationEdit() {
                    
                 </form>
             </div>
+            </Suspense>
         </main>
     );
 };

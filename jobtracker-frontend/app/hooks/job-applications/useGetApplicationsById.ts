@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const useGetApplicationsById = () => {
     const [loading, setLoading] = useState(false);
 
-    const getApplicationsById = async (id: number) => {
+    const getApplicationById = async (id: string) => {
         setLoading(true);
 
         try{
@@ -27,7 +27,7 @@ const useGetApplicationsById = () => {
         }
     }
 
-    return {loading, getApplicationsById};
+    return {loading, getApplicationById};
 }
 
 export default useGetApplicationsById;

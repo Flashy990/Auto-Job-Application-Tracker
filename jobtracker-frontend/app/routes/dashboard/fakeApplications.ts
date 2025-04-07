@@ -596,46 +596,6 @@ export const fakeApplications:Application[] = [
         documents:['Resume', 'Cover Letter'],
         notes:''
     },
-    {
-        id:59,
-        jobPosition:'Software Development Engineer',
-        company:'Microsoft',
-        salaryRange:'$100,000 - $140,000',
-        location:'Redmond, WA',
-        status:'Applied',
-        documents:['Resume', 'Cover Letter'],
-        notes:''
-    },
-    {
-        id:60,
-        jobPosition:'Software Development Engineer',
-        company:'LinkedIn',
-        salaryRange:'$120,000 - $170,000',
-        location:'Sunnyvale, CA',
-        status:'Applied',
-        documents:['Resume', 'Cover Letter'],
-        notes:''
-    },
-    {
-        id:61,
-        jobPosition:'Software Development Engineer',
-        company:'eBay',
-        salaryRange:'$100,000 - $150,000',
-        location:'San Jose, CA',
-        status:'Applied',
-        documents:['Resume', 'Cover Letter'],
-        notes:''
-    },
-    {
-        id:62,
-        jobPosition:'Software Development Engineer',
-        company:'DoorDash',
-        salaryRange:'$110,000 - $180,000',
-        location:'San Francisco, CA',
-        status:'Applied',
-        documents:['Resume', 'Cover Letter'],
-        notes:''
-    },
 ];
 
 export const fakeStatuses: Status[] = [

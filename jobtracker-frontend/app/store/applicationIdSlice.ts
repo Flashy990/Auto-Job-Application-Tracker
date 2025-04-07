@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface ApplicationIdState{
+    applicationId: {
+        value: string
+    }
+}
+
 export const applicationIdSlice = createSlice({
     name: 'applicationId',
     initialState: {
-        value: -1
+        value: ''
     },
     reducers: {
         setApplicationId: (state, action) => {
