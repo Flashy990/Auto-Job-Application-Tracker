@@ -5,12 +5,12 @@ import { axiosInstance } from "~/libs/axios";
 import { handleApiError } from "../handleError";
 
 const useGetApplications = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingGA, setLoadingGA] = useState(false);
     const [applications, setApplications] = useState([]);
 
     useEffect(() => {
         const getApplications = async () => {
-            setLoading(true);
+            setLoadingGA(true);
     
             try {
                 const res = await axiosInstance.get("/applications");
@@ -26,7 +26,7 @@ const useGetApplications = () => {
                     toast.error('Failed to get your applications');
                 }
             } finally {
-                setLoading(false);
+                setLoadingGA(false);
             }
         }
 
@@ -34,7 +34,7 @@ const useGetApplications = () => {
     }, []);
     
 
-    return {loading, applications};
+    return {loadingGA, applications};
 }
 
 

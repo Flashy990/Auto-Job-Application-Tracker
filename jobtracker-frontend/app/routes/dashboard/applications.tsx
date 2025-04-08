@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import useGetApplicationsByStatus from "~/hooks/job-applications/useGetApplicationsByStatus";
 import { useDispatch } from "react-redux";
 import { setApplicationId } from "~/store/applicationIdSlice";
+import useDeleteApplication from "~/hooks/job-applications/useDeleteApplication";
 
 export default function Applications() {
     const [windowWidth, setWindowWidth] = useState(0);
@@ -18,9 +19,11 @@ export default function Applications() {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {loading, getApplicationsByStatus} = useGetApplicationsByStatus();
+    const {loadingGAS, getApplicationsByStatus} = useGetApplicationsByStatus();
+    const {loadingDA, deleteApplication} = useDeleteApplication();
     const [startRow, setStartRow] = useState(0);
     const [endRow, setEndRow] = useState(0);
+
 
     const LG_SCREEN = 1375;
     const APPLICATIONS_PER_PAGE = 9;
@@ -89,6 +92,11 @@ export default function Applications() {
     const clickSearch = (e: FormEvent) => {
 
     }
+
+    const clickDelete = (id: string) => {
+        
+    };
+
  
     return (
         <main className="flex flex-col sm:flex-row gap-8">

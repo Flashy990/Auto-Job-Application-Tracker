@@ -11,7 +11,7 @@ export default function ApplicationEdit() {
     const [application, setApplication] = useState(null);
     const statusOptions = ['Applying', 'Applied', 'Interviewing', 'Offered', 'Rejected'];
     const applicationId = useSelector((state: ApplicationIdState) => state.applicationId.value);
-    const {loading, getApplicationById} = useGetApplicationsById();
+    const {loadingGAI, getApplicationById} = useGetApplicationsById();
     const navigate = useNavigate();
 
     useEffect(() => {

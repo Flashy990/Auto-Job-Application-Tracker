@@ -4,10 +4,10 @@ import { handleApiError, type ErrorResponse } from "../handleError";
 import toast from "react-hot-toast";
 
 const useGetApplicationsById = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingGAI, setLoadingGAI] = useState(false);
 
     const getApplicationById = async (id: string) => {
-        setLoading(true);
+        setLoadingGAI(true);
 
         try{
             const res = await axiosInstance.get(`/applications/${id}`);
@@ -23,11 +23,11 @@ const useGetApplicationsById = () => {
                 toast.error(`Failed to get the application(id: ${id})`);
             }
         } finally {
-            setLoading(false);
+            setLoadingGAI(false);
         }
     }
 
-    return {loading, getApplicationById};
+    return {loadingGAI, getApplicationById};
 }
 
 export default useGetApplicationsById;

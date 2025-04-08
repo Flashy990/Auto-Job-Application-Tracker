@@ -5,10 +5,10 @@ import toast from "react-hot-toast";
 import { handleApiError, type ErrorResponse } from "../handleError";
 
 const useUpdateApplication = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingUA, setLoadingUA] = useState(false);
 
     const updateApplication = async (id: number, jobApplication: JobApplication) => {
-        setLoading(true);
+        setLoadingUA(true);
 
         try{
             const res = await axiosInstance.put(`/applications/${id}`, jobApplication, {
@@ -31,11 +31,11 @@ const useUpdateApplication = () => {
                 toast.error(`Failed to update your application(id: ${id})`);
             }
         } finally {
-            setLoading(false);
+            setLoadingUA(false);
         }
     }
 
-    return {loading, updateApplication};
+    return {loadingUA, updateApplication};
 }
 
 export default useUpdateApplication;

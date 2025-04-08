@@ -8,11 +8,11 @@ export interface StatusMap {
 }
 
 const useUpdateApplicationStatus = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingUAS, setLoadingUAS] = useState(false);
 
     const updateApplicationStatus = async (id: number, status: StatusMap) => {
 
-        setLoading(true);
+        setLoadingUAS(true);
 
         try{
             const res = await axiosInstance.patch(`/${id}/status`, status, {
@@ -22,7 +22,7 @@ const useUpdateApplicationStatus = () => {
             })
 
             if(res.status === 200) {
-                toast.success(`Update application with id ${id} successfully`);
+                toast.success(`Update application(id: ${id}) successfully`);
             }
 
         } catch(error) {
@@ -35,11 +35,11 @@ const useUpdateApplicationStatus = () => {
                 toast.error(`Failed to update your application(id: ${id})'s status`);
             }
         } finally {
-            setLoading(false);
+            setLoadingUAS(false);
         }
     }
 
-    return {loading, updateApplicationStatus};
+    return {loadingUAS, updateApplicationStatus};
 }
 
 export default useUpdateApplicationStatus;

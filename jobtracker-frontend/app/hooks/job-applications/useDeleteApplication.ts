@@ -4,10 +4,10 @@ import { axiosInstance } from "~/libs/axios";
 import { handleApiError } from "../handleError";
 
 const useDeleteApplication  = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingDA, setLoadingDA] = useState(false);
 
     const deleteApplication = async (id: number) => {
-        setLoading(true);
+        setLoadingDA(true);
 
         try {
             const res = await axiosInstance.delete(`/applications/${id}`);
@@ -25,11 +25,11 @@ const useDeleteApplication  = () => {
                 toast.error(`Failed to delete your job application(id: ${id})`);
             }
         } finally {
-            setLoading(false);
+            setLoadingDA(false);
         }
     }
 
-    return {loading, deleteApplication};
+    return {loadingDA, deleteApplication};
 };
 
 export default useDeleteApplication;

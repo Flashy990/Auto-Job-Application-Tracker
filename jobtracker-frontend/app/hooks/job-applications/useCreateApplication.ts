@@ -17,10 +17,10 @@ export interface JobApplication {
 }
 
 const useCreateApplication = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingCA, setLoadingCA] = useState(false);
     
     const createApplication = async (jobApplication: JobApplication) => {
-        setLoading(true);
+        setLoadingCA(true);
         
         try {
             const res = await axiosInstance.post('/applications', jobApplication, {
@@ -42,12 +42,12 @@ const useCreateApplication = () => {
                 toast.error('Failed to create the new application');
             }
         } finally {
-            setLoading(false);
+            setLoadingCA(false);
         }
 
     }
 
-    return {loading, createApplication};
+    return {loadingCA, createApplication};
 }
 
 export default useCreateApplication;

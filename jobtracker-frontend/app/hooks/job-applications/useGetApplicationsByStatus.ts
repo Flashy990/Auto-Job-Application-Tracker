@@ -4,10 +4,10 @@ import { handleApiError, type ErrorResponse } from "../handleError";
 import toast from "react-hot-toast";
 
 const useGetApplicationsByStatus = () => {
-    const [loading, setLoading] = useState(false);
+    const [loadingGAS, setLoadingGAS] = useState(false);
 
     const getApplicationsByStatus = async (status: string) => {
-        setLoading(true);
+        setLoadingGAS(true);
 
         try{
             const res = await axiosInstance.get(`/applications/status/${status}`);
@@ -23,11 +23,11 @@ const useGetApplicationsByStatus = () => {
                 toast.error(`Failed to get your applications with status ${status}`);
             }
         } finally {
-            setLoading(false);
+            setLoadingGAS(false);
         }
     }
 
-    return {loading, getApplicationsByStatus};
+    return {loadingGAS, getApplicationsByStatus};
 
 }
 
