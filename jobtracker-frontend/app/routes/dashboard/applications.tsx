@@ -78,11 +78,14 @@ export default function Applications() {
 
     const clickFilter = async (status: string) => {
         if(statusClick !== status) {
-            const filteredApplications = await getApplicationsByStatus(status);
-            if(filteredApplications.length !== 0) {
-                setDisplayApplications(filteredApplications);
-                setStatusClick(status);
-            }
+            // *** temporary solution for display ***
+            setDisplayApplications(fakeApplications.filter(application => application.status === status));
+            setStatusClick(status);
+            // const filteredApplications = await getApplicationsByStatus(status);
+            // if(filteredApplications) {
+            //     setDisplayApplications(filteredApplications);
+            //     setStatusClick(status);
+            // }
         } else {
             setDisplayApplications(fakeApplications);
             setStatusClick('');
@@ -93,8 +96,11 @@ export default function Applications() {
 
     }
 
-    const clickDelete = (id: string) => {
-        
+    const clickDelete = async (id: number) => {
+       // await deleteApplication(id);
+       // *** a temporary solution ***
+       const afterDelete = displayApplications.filter(application => application.id !== id);
+       setDisplayApplications(afterDelete);
     };
 
  
@@ -111,7 +117,7 @@ export default function Applications() {
                             <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
                             <div className="flex flex-col gap-3">
                                 {fakeStatuses.map((status, index) => {
-                                    return <div key={index} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100 cursor-pointer hover:bg-secondary ${status.name === statusClick ? 'bg-secondary' : ''}`}>
+                                    return <div key={status.name} onClick={() => clickFilter(status.name)} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100 cursor-pointer hover:bg-secondary ${status.name === statusClick ? 'bg-secondary' : ''}`}>
                                         <p className="text-[12px]">{status.name}</p>
                                         <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
                                     </div>
@@ -151,7 +157,7 @@ export default function Applications() {
                                 </div>
                             </div>
                             {displayApplications.slice(startRow, endRow).map((application, index) => {
-                                return <div key={index} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}} 
+                                return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}} 
                                 className={`flex flex-row gap-5 h-[50px] text-[15px] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOne' : 'animate-shakeTwo')+' cursor-pointer' : '' } `}>
                                     <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{(curPage - 1) * 9 + index + 1}</div>
                                     <div className="relative flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
@@ -162,15 +168,16 @@ export default function Applications() {
                                         <h1 className="w-[90px]">{application.status}</h1>
                                         <h1 className="w-[110px]">{application.documents.join(', ')}</h1>
                                         <h1 className="w-[36px]">{application.notes}</h1>
-                                        <img src={crossDelLogo} alt="delete-logo" className={`${isManaging? '' : 'hidden'} h-4.5 absolute -top-1.5 -right-1.5`} />
+                                        <img src={crossDelLogo} alt="delete-logo" onClick={(e) => {e.stopPropagation();clickDelete(application.id);}} className={`${isManaging? '' : 'hidden'} h-4.5 absolute -top-1.5 -right-1.5 cursor-pointer`} />
                                     </div>
                                 </div>})}
                             </div>)
                     : 
                     (<div className="flex flex-wrap gap-5 z-0">
                         { displayApplications.slice(startRow, endRow).map((application, index) => {
-                            return <div key={index} className={`relative w-60 ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
-                                    <img src={crossDelLogo} alt="delete-logo" className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 ${isManaging ? '' : 'hidden'}`}/>
+                            return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
+                            className={`relative w-60 ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
+                                    <img src={crossDelLogo} alt="delete-logo" onClick={(e) =>{e.stopPropagation();clickDelete(application.id);}} className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 cursor-pointer ${isManaging ? '' : 'hidden'}`}/>
                                     <div className="flex flex-row font-allerta-stencil text-[17px] absolute -top-3.5 left-2.5 gap-1">
                                         <p className="bg-gray-100 w-fit">{(curPage - 1) * 9 + index + 1}</p>
                                         <p className="bg-gray-100 w-fit">{application.company}</p>

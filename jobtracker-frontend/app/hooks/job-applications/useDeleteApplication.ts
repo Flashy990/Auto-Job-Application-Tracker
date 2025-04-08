@@ -13,8 +13,9 @@ const useDeleteApplication  = () => {
             const res = await axiosInstance.delete(`/applications/${id}`);
 
             if(res.status === 204) {
-                toast.success(`Delete your job application(id: ${id}) successfully.`);
+                toast.success(`Delete your job application(id: ${id}) successfully.`);  
             }
+            return true;
         } catch(error){
             const {message , details} = handleApiError(error);
             if(message === 'Unknown error') {
@@ -24,6 +25,7 @@ const useDeleteApplication  = () => {
                 console.log(details);
                 toast.error(`Failed to delete your job application(id: ${id})`);
             }
+            return false;
         } finally {
             setLoadingDA(false);
         }
