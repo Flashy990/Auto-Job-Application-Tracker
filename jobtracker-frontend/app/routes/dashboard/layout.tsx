@@ -82,7 +82,7 @@ export default function DashboardLayout() {
 
     return (
         <>
-            <header ref={headerRef} className="flex flex-row items-center py-1 border-b-1 h-[85px]">
+            <header ref={headerRef} className="flex flex-row items-center py-1 border-b-1 h-[60px] sm:h-[85px]">
                 <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl w-[15vw] md:text-5xl xl:text-6xl pl-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
                 <h1 className="text-2xl w-[70vw] lg:text-4xl xl:text-5xl font-allerta-stencil text-center self-center">Job Application Tracker</h1>
                 <div onClick={clickAvatar} ref={avatarRef} className="w-[15vw] md:pl-[6vw] flex flex-col items-center self-center cursor-pointer">

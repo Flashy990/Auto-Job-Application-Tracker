@@ -7,7 +7,7 @@ export default [
         route("signup/password", "routes/auth/password.tsx"),
         route("signup/user-info", "routes/auth/userinfo.tsx"),
         route("login", "routes/auth/login.tsx"),
-        
+        route("forget-password", "routes/auth/forgetPassword.tsx"),
     ]),
     ...prefix("dashboard", [
         layout("routes/dashboard/layout.tsx", [
@@ -18,7 +18,6 @@ export default [
                 layout("routes/dashboard/settings.tsx", [
                     route("profile", "routes/dashboard/settings/profile.tsx"),
                     route("privacy", "routes/dashboard/settings/privacy.tsx"),
-                    route("automatic", "routes/dashboard/settings/automatic.tsx"),
                 ])
             ])
         ]),

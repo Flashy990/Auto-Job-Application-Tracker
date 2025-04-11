@@ -131,6 +131,15 @@ body {
   } */
 }
 
+img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .wavy-border-bottom {
   background: radial-gradient(20px at 50% 0px, #0000 99%, red 101%) 50% 20px/calc(4*20px) 100% no-repeat;
 }

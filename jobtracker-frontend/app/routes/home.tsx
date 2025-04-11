@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import { useAuth } from "~/context/AuthContext";
 import maleAvatar from '/images/male-avatar.png';
+import documentPic from '/images/documents-doodle.png';
 import FadeInSection from "~/components/FadeInSection";
 
 export function meta({}: Route.MetaArgs) {
@@ -11,8 +12,6 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const blockcolors = ['bg-gray-400', 'bg-emerald-400', 'bg-yellow-400','bg-blue-400', 'bg-sky-400', 'bg-cyan-400', 'bg-orange-400'];
-
 export default function Home() {
   const {authUser} = useAuth();
 
@@ -20,7 +19,7 @@ export default function Home() {
 
   return (
   <div>
-    <header className="flex flex-row items-center py-1 border-b-1 h-[85px]">
+    <header className="flex flex-row items-center py-1 border-b-1 h-[60px] sm:h-[85px]">
       <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl w-[15vw] md:text-5xl xl:text-6xl pl-4 text-[#BAD8C6]">JAT</h1>
       {/* unsolved: header layout design consistency */}
       <h1 className={`text-2xl w-[70vw] lg:text-4xl xl:text-5xl font-allerta-stencil text-center self-center`}>Job Application Tracker</h1>
@@ -34,10 +33,34 @@ export default function Home() {
             <Link to={'/login'} className=" border-2 px-2 w-max py-1 rounded-xl hover:text-gray-100 hover:bg-gray-900 hover:border-gray-900">Log in</Link>
           </div>) }
     </header>
-    <main className="mt-7 flex flex-col gap-10">
-      {blockcolors.map((color, index) => {
-        return <FadeInSection key={index}><div className={`flex mx-[100px] h-[200px] items-center justify-center ${color}`}>block {index + 1}</div></FadeInSection>
-      })}
+    <main className="mt-7 flex flex-col gap-10 mx-28">
+      <div className="flex flex-row justify-between relative">
+        <div className="flex flex-col z-10 mt-15">
+          <h1 className="text-[38px]">Keep</h1>
+          <h1 className="text-[38px]">Your Job Applications</h1>
+          <h1 className="text-[38px]">on Track</h1>
+          <h1 className="text-[20px]">Efficient, Convenient, and Organized</h1>
+        </div>
+        <img src={documentPic} alt="document-doodle" className="w-[44vw]" draggable={false}/>
+      </div>
+      <div className="flex flex-col gap-10">
+          <FadeInSection>
+            <div className="border-2 rounded-2xl bg-gray-200">
+              <h1>Record important details of your job applications</h1>
+            </div>
+          </FadeInSection>
+          <FadeInSection>
+            <div className="border-2 rounded-2xl bg-gray-200">
+              <h1>Update the status of every job application</h1>
+            </div>
+          </FadeInSection>
+          <FadeInSection>
+            <div className="border-2 rounded-2xl bg-gray-200">
+              <h1>Reflect on your interview performance by adding notes</h1>
+            </div>
+          </FadeInSection>
+      </div>
+      
     </main>
   </div>);
 }

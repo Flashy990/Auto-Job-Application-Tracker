@@ -33,6 +33,7 @@ export default function Login() {
                 </button>
             </form>
             <p>Not a member yet? <u className="cursor-pointer" onClick={() => navigate('/signup')}>Create an account</u></p>
+            <p className="cursor-pointer" onClick={() => navigate("/forget-password")}><u>Forget your password?</u></p>
         </div>
     );
 };

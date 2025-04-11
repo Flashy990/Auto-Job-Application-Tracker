@@ -10,5 +10,28 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:8080'
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-core': ['react', 'react-dom'],
+          'router': ['@react-router/node', '@react-router/serve', 'react-router', '@react-router/dev', 'react-router-devtools'],
+          'redux': ['@reduxjs/toolkit', 'react-redux'],
+          'ui-components': ['react-hot-toast', 'isbot'],
+          'network': ['axios'],
+          'styling': ['tailwindcss', '@tailwindcss/vite'],
+          'dev-tools': [
+            '@types/node', 
+            '@types/react', 
+            '@types/react-dom', 
+            'typescript', 
+            'vite-tsconfig-paths']
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router', '@reduxjs/toolkit', 'react-redux', 'axios'],
   }
 });
