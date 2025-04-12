@@ -13,10 +13,7 @@ import teamjobapptracker.jobapplicationtrackerbackend.service.JobApplicationServ
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,14 +62,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
             throw new ResourceNotFoundException("JobApplication", "userId", userId);
         } else {
             return applicationList.stream()
-        List<JobApplication> applicationList = jobApplicationRepository.findByUserId(userId);
-        if (applicationList.isEmpty()) {
-            throw new ResourceNotFoundException("JobApplication", "userId", userId);
-        } else {
-            return applicationList.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-        }
         }
     }
 
@@ -156,7 +147,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public JobApplicationDTO deleteApplication(Long id, Long userId) {
-    public JobApplicationDTO deleteApplication(Long id, Long userId) {
         JobApplication application = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("JobApplication", "id", id));
 
@@ -166,7 +156,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         }
 
         jobApplicationRepository.deleteById(id);
-        return convertToDTO(application);
         return convertToDTO(application);
     }
 
