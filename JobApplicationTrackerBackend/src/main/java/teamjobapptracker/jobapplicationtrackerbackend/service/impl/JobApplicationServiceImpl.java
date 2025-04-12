@@ -94,9 +94,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public List<JobApplicationDTO> getApplicationsBySearch(Long userId, String search) {
         // List<JobApplication> resApplications = new ArrayList<JobApplication>();
 
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("Search String: " + search);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Search String: " + search);
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         List<String> keywords = Arrays.stream(search.split("\\+"))
                               .filter(word -> !word.isEmpty()) // this will ignore empty strings
                               .toList();
@@ -111,11 +111,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return resApplications.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-
-
-        // return jobApplicationRepository.findEntryFromSubstringCustomQuery(userId, search).stream()
-        //         .map(this::convertToDTO)
-        //         .collect(Collectors.toList());
     }
 
     @Override
