@@ -11,7 +11,10 @@ import teamjobapptracker.jobapplicationtrackerbackend.repository.JobApplicationR
 import teamjobapptracker.jobapplicationtrackerbackend.repository.UserRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.service.JobApplicationService;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,14 +57,49 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public List<JobApplicationDTO> getAllApplicationsForUser(Long userId) {
-        return jobApplicationRepository.findByUserId(userId).stream()
+        List<JobApplication> applicationList = jobApplicationRepository.findByUserId(userId);
+        if (applicationList.isEmpty()) {
+            throw new ResourceNotFoundException("JobApplication", "userId", userId);
+        } else {
+            return applicationList.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+        }
     }
 
     @Override
     public List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status) {
         return jobApplicationRepository.findByUserIdAndStatus(userId, status).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    /*
+     * The search string should have keywords separated by "+"
+     * For example: "keyword1+keyword2+keyword3"
+     * or 
+     * For example: "keyword1"
+     */
+    @Override
+    public List<JobApplicationDTO> getApplicationsBySearch(Long userId, String search) {
+        // List<JobApplication> resApplications = new ArrayList<JobApplication>();
+
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        // System.out.println("Search String: " + search);
+        // System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+        List<String> keywords = Arrays.stream(search.split("\\+"))
+                              .filter(word -> !word.isEmpty()) // this will ignore empty strings
+                              .toList();
+
+        // to make a list of job applications to send as the response
+        Set<JobApplication> resApplications = new HashSet<JobApplication>();
+
+        for (String keyword : keywords) {
+            resApplications.addAll(jobApplicationRepository.findEntryFromSubstringCustomQuery(userId, keyword));
+        }
+
+        return resApplications.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -108,7 +146,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public void deleteApplication(Long id, Long userId) {
+    public JobApplicationDTO deleteApplication(Long id, Long userId) {
         JobApplication application = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("JobApplication", "id", id));
 
@@ -118,6 +156,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         }
 
         jobApplicationRepository.deleteById(id);
+        return convertToDTO(application);
     }
 
     private JobApplicationDTO convertToDTO(JobApplication application) {
