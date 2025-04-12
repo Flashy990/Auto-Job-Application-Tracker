@@ -16,7 +16,7 @@ public interface JobApplicationService {
     List<JobApplicationDTO> getAllApplicationsForUser(Long userId);
     
     // Get applications for a user filtered by status
-    List<JobApplicationDTO> getApplicationsByStatus(Long userId, ApplicationStatus status);
+    List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status);
 
     // Get applications based on search string
     List<JobApplicationDTO> getApplicationsBySearch(Long userId, String search);

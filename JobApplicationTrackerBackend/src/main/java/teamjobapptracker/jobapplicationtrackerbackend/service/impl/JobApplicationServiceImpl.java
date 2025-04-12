@@ -69,7 +69,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public List<JobApplicationDTO> getApplicationsByStatus(Long userId, ApplicationStatus status) {
+    public List<JobApplicationDTO> getApplicationsByStatus(Long userId, JobApplication.ApplicationStatus status) {
         return jobApplicationRepository.findByUserIdAndStatus(userId, status).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -104,6 +104,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public JobApplicationDTO updateApplication(Long id, JobApplicationDTO applicationDTO, Long userId) {
