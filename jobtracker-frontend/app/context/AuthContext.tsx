@@ -22,7 +22,9 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        checkLoginStatus();
+        if(!authUser) {
+            checkLoginStatus();
+        }
     },[]);
 
     const checkLoginStatus = async () => {

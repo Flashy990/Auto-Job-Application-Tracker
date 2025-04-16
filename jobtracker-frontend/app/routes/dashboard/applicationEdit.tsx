@@ -27,11 +27,11 @@ export default function ApplicationEdit() {
                 }
             }
         }
-        if(!applicationId) {
-            navigate('/dashboard/applications');
-        } else {
-            fetchApplication(); 
-        }
+        // if(!applicationId) {
+        //     navigate('/dashboard/applications');
+        // } else {
+        //     fetchApplication(); 
+        // }
     },[applicationId]);
 
     const clickDelete = async (id:string) => {
@@ -56,29 +56,46 @@ export default function ApplicationEdit() {
                     <form role='form' action="" className="flex flex-col gap-6">
                         <div className="flex flex-col gap-3">
                             <div>
-                                <label htmlFor="job-position">Job Position: </label>
-                                <input type="text" id="job-position" className="border-3 rounded-[10px]"/>
+                                <label htmlFor="company">Company: </label>
+                                <input type="text" id="company" className="border-3 rounded-[10px] px-1"/>
                             </div>
                             <div>
-                                <label htmlFor="company">Company: </label>
-                                <input type="text" id="company" className="border-3 rounded-[10px]"/>
+                                <label htmlFor="job-position">Position: </label>
+                                <input type="text" id="job-position" className="border-3 rounded-[10px] px-1"/>
                             </div>
-                            <div className="flex flex-row items-center">
-                                <label htmlFor="salary-range">Salary Range: </label>
-                                <div className="flex flex-row items-center">
-                                    <p>&nbsp;$&nbsp;</p> <input type="text" id="min-salary" className="border-3 rounded-[10px]"/> <p>&nbsp;- $&nbsp;</p><input type="text" id="max-salary" className="border-3 rounded-[10px]"/>
-                                </div>
+                            <div>
+                                <label htmlFor="job-description">Job Description: </label>
+                                <textarea className="border-3 block rounded-[10px] w-90 h-20 px-1"/>
+                            </div>
+                            <div>
+                                <label htmlFor="application-url">Application URL: </label>
+                                <input type="text" className="border-3 rounded-[10px] px-1"/>
+                            </div>
+                            <div>
+                                <label htmlFor="status">Status: </label>
+                                <OptionsSelector options={statusOptions} onChange={setStatus}/>
+                            </div>
+                            <div>
+                                <label htmlFor="application-date">Application Date: </label>
+                                <input type='date' className="border-3 rounded-[10px] px-1"/>
                             </div>
                             <div>
                                 <label htmlFor="location">Location: </label>
-                                <input type="text" id="location" className="border-3 rounded-[10px]"/>
+                                <input type="text" id="location" className="border-3 rounded-[10px] px-1"/>
                             </div>
                             <div>
-                                <label htmlFor="status">Status: 
-                                    <OptionsSelector options={statusOptions} onChange={setStatus}/>
-                                </label>
+                                <label htmlFor="salary">Salary: </label>
+                                <input type="text" id="salary" className="border-3 rounded-[10px] px-1"/>
                             </div>
                             <div>
+                                <label htmlFor="contact-name">Contact Name: </label>
+                                <input type="text" className="border-3 rounded-[10px] px-1"/>
+                            </div>
+                            <div>
+                                <label htmlFor="contact-email">Contact Email: </label>
+                                <input type="text" className="border-3 rounded-[10px] px-1"/>
+                            </div>
+                            {/* <div>
                                 <label htmlFor="documents">Documents: </label>
                                 <div className="mt-3">
                                     <input type='file' id="document-upload" name="document-upload" 
@@ -87,11 +104,11 @@ export default function ApplicationEdit() {
                                     <span id="file-chosen">No file chosen</span>
                                 </div>
                                 <button className="mt-3 cursor-pointer"> + Add Another File</button>
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                                 <label htmlFor="notes">Notes:</label>
                                 <textarea id="notes" className="border-3 block w-100 h-50 rounded-[10px]"/>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex flex-row gap-5">
                             <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px] cursor-pointer">{applicationId !== 'new' ? 'Save' : 'Submit'}</button>

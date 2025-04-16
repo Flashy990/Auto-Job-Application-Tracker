@@ -27,9 +27,7 @@ export default function Applications() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDeletingId, setIsDeletingId] = useState(-1);
 
-
-    const LG_SCREEN = 1375;
-    const APPLICATIONS_PER_PAGE = 9;
+    const APPLICATIONS_PER_PAGE = 12;
     const PAGES_DISPLAY = 5;
     let pages = Math.ceil(displayApplications.length / APPLICATIONS_PER_PAGE);
 
@@ -70,11 +68,11 @@ export default function Applications() {
     }
 
     useEffect(() => {
-        if(curPage * 9  < displayApplications.length) {
-            setStartRow((curPage - 1) * 9);
-            setEndRow(curPage * 9);
+        if(curPage * APPLICATIONS_PER_PAGE  < displayApplications.length) {
+            setStartRow((curPage - 1) * APPLICATIONS_PER_PAGE);
+            setEndRow(curPage * APPLICATIONS_PER_PAGE);
         } else {
-            setStartRow((curPage - 1) * 9);
+            setStartRow((curPage - 1) * APPLICATIONS_PER_PAGE);
             setEndRow(displayApplications.length);
         }
     },[curPage, displayApplications]);
@@ -114,9 +112,9 @@ export default function Applications() {
     return (
         <main className="flex flex-col sm:flex-row gap-8">
             {isDeleting && <AlertBox leftButton={"Cancel"} rightButton={"Confirm"} dialogue={`Do you want to delete this job application(id: ${isDeletingId})?`} clickLeft={()=>{setIsDeleting(false);setIsDeletingId(-1)}} clickRight={()=> {clickDelete(isDeletingId)}}/>}
-            <aside className="flex flex-row justify-evenly bg-[#BAD8C6]/50 sticky top-0 z-10 sm:static sm:flex-col items-center sm:justify-between sm:px-5 sm:min-h-[calc(89vh)]">
-                {/* desktop view */}
-                <div className="hidden sm:flex flex-col items-center">
+             {/* desktop view */}
+            <aside className="bg-[#BAD8C6]/50 z-10 hidden md:flex flex-col items-center justify-between px-5 min-h-[calc(100vh-85px)]">
+                <div className="flex flex-col items-center">
                     <form role='search' className="mt-5 flex flex-row gap-3 items-center">
                         <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle focus:outline-0 focus:border-secondary" type="search" id="search" placeholder="search for applications" name="application"/>
                         <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
@@ -133,72 +131,45 @@ export default function Applications() {
                         </div>
                     </div>
                 </div>
-                <div className="hidden sm:flex flex-col gap-3 items-center mb-5">
+                <div className="flex flex-col gap-3 items-center mb-5">
                     <button onClick={() => {dispatch(setApplicationId('new'));navigate('/dashboard/edit-application/new');}} className={`font-allerta-stencil w-[130px] rounded-[10px] border-3 border-secondary cursor-pointer ${isManaging ? '' : 'hidden'}`}>Add a new job application</button>
                     <button onClick={() => setIsManaging(!isManaging)} className={`font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 rounded-[10px] cursor-pointer hover:bg-secondary ${isManaging ? 'bg-secondary' : ''}`}>
                         Manage your applications
                     </button>
                 </div>
+            </aside>
+                
+                
                 
 
                 {/* mobile view */}
-                <div className="relative sm:hidden">
-                    <button className="text-[12px] my-2 px-1 hover:bg-secondary rounded-2xl sm:hidden">Check Statuses</button>
-                    <div className="absolute flex flex-col items-start gap-1 py-1 pl-1 pr-3 text-[12px] left-0.5 top-7 bg-primary">
+            <aside className="bg-[#BAD8C6]/50 z-10 flex flex-row w-[100vw] justify-evenly sticky md:hidden">
+                <div className="relative text-[12px] my-2 px-1">
+                    <button className="hover:bg-secondary rounded-2xl">Check Statuses</button>
+                    {/* <div className="absolute flex flex-col items-start gap-1 py-1 pl-1 pr-3 text-[12px] left-0.5 top-7 bg-primary">
                         <button>applying</button>
                         <button>applied</button>
                         <button>interviewing</button>
                         <button>offered</button>
                         <button>rejected</button>
-                    </div>
+                    </div> */}
                 </div>
-                <form role="search" className="flex flex-row gap-2 my-2 items-center sm:hidden">
+                <form role="search" className="flex flex-row gap-2 my-2 items-center">
                     <input className="text-[12px] border-2 w-41 rounded-xl h-[22px] pl-2 placeholder:text-[12px] placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
                     <button type='submit' className="h-4 w-4 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
                 </form>
-                <button className="text-[12px] hover:bg-secondary rounded-2xl px-1 my-2 sm:hidden">Manage your application</button>
+                <button className="text-[12px] hover:bg-secondary rounded-2xl px-1 my-2">Manage your application</button>
             </aside>
 
             {/* desktop view for applications */}
-            <div className="hidden sm:flex mt-4 flex-col items-center z-0 flex-grow justify-between sm:min-h-[calc(89vh)]">
-                {windowWidth >= LG_SCREEN ? 
-                    (<div className="flex flex-col text-[16px] gap-3">
-                        <div className="flex flex-row gap-5 font-allerta-stencil h-[58px]">
-                            <div className="flex bg-[#BAD8C6] w-[43px] rounded-[15px] border-3 items-center justify-center">No.</div>
-                            <div className="flex flex-row items-center gap-16 pl-4 pr-10 bg-[#BAD8C6] rounded-[15px] border-3">
-                                <h1 className="pr-6">Job Position</h1>
-                                <h1>Company</h1>
-                                <h1>Salary Range</h1>
-                                <h1>Location</h1>
-                                <h1 className="pl-3">Status</h1>
-                                <h1 className="pl-3">Documents</h1>
-                                <h1>Notes</h1>
-                            </div>
-                        </div>
-                        {displayApplications.slice(startRow, endRow).map((application, index) => {
-                            return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}} 
-                            className={`flex flex-row gap-5 h-[50px] text-[15px] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOne' : 'animate-shakeTwo')+' cursor-pointer' : '' } `}>
-                                <div className="flex w-[43px] rounded-[15px] border-3 items-center justify-center">{(curPage - 1) * 9 + index + 1}</div>
-                                <div className="relative flex flex-row items-center gap-9 pl-4 pr-15 rounded-[15px] border-3">
-                                    <h1 className="text-[12px] w-[150px]">{application.jobPosition}</h1>
-                                    <h1 className="w-[100px]">{application.company}</h1>
-                                    <h1 className="w-[135px]">{application.salaryRange}</h1>
-                                    <h1 className="w-[110px]">{application.location}</h1>
-                                    <h1 className="w-[90px]">{application.status}</h1>
-                                    <h1 className="w-[110px]">{application.documents.join(', ')}</h1>
-                                    <h1 className="w-[36px]">{application.notes}</h1>
-                                    <img src={crossDelLogo} alt="delete-logo" onClick={(e) => {e.stopPropagation();setIsDeleting(true);setIsDeletingId(application.id)}} className={`${isManaging? '' : 'hidden'} h-4.5 absolute -top-1.5 -right-1.5 cursor-pointer`} />
-                                </div>
-                            </div>})}
-                        </div>)
-                : 
-                (<div className="flex flex-wrap gap-5 z-0">
+            <div className="hidden md:flex mt-8 flex-col items-center z-0 flex-grow justify-between sm:min-h-[calc(100vh-85px)]">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 z-0">
                     { displayApplications.slice(startRow, endRow).map((application, index) => {
                         return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
-                        className={`relative w-60 ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
+                        className={`relative w-[100%] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
                                 <img src={crossDelLogo} alt="delete-logo" onClick={(e) =>{e.stopPropagation();setIsDeleting(true);setIsDeletingId(application.id)}} className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 cursor-pointer ${isManaging ? '' : 'hidden'}`}/>
                                 <div className="flex flex-row font-allerta-stencil text-[17px] absolute -top-3.5 left-2.5 gap-1">
-                                    <p className="bg-gray-100 w-fit">{(curPage - 1) * 9 + index + 1}</p>
+                                    <p className="bg-gray-100 w-fit">{(curPage - 1) * APPLICATIONS_PER_PAGE + index + 1}</p>
                                     <p className="bg-gray-100 w-fit">{application.company}</p>
                                     <p className="bg-gray-100 w-fit text-[#BAD8C6]">{application.status}</p>
                                 </div>
@@ -216,7 +187,7 @@ export default function Applications() {
                                 </div>
                             </div>
                         })}   
-                </div>)}
+                </div>
                 <div className="flex flex-row gap-7 items-center mb-5 mt-5">
                     <button onClick={clickPrev} className="cursor-pointer">Previous</button>
                     {/* implementing pagination ... */}

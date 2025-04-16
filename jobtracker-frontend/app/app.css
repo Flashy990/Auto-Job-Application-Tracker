@@ -13,14 +13,12 @@
   --color-secondary: #90ab9a;
 
   --breakpoint-sm:550px;
-  --breakpoint-md:720px;
-  --breakpoint-lg:920px;
-  --breakpoint-xl:1375px;
+  --breakpoint-md:800px;
+  --breakpoint-lg:1070px;
+  --breakpoint-xl:1300px;
 
   --animate-slide-in: slide-in 0.6s forwards;
   --animate-slide-out: slide-out 0.8s forwards;
-  --animate-shakeOne: shakeOne 0.5s infinite;
-  --animate-shakeTwo: shakeTwo 0.5s infinite;
   --animate-shakeOnePlus: shakeOnePlus 0.5s infinite;
   --animate-shakeTwoPlus: shakeTwoPlus 0.5s infinite;
 
@@ -45,42 +43,6 @@
     100%{
       transform: translateX(215px);
       display: none;
-    }
-  }
-
-  @keyframes shakeOne {
-    0% {
-      transform: rotate(0turn);
-    }
-    25% {
-      transform: rotate(-0.0005turn);
-    }
-    50% {
-      transform: rotate(0turn);
-    }
-    75% {
-      transform: rotate(0.0005turn);
-    }
-    100% {
-      transform: rotate(0turn);
-    }
-  }
-
-  @keyframes shakeTwo {
-    0% {
-      transform: rotate(0turn);
-    }
-    25% {
-      transform: rotate(0.0005turn);
-    }
-    50% {
-      transform: rotate(0turn);
-    }
-    75% {
-      transform: rotate(-0.0005turn);
-    }
-    100% {
-      transform: rotate(0turn);
     }
   }
 
