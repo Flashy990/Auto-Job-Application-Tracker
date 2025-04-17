@@ -82,12 +82,12 @@ export default function DashboardLayout() {
 
     return (
         <>
-            <header ref={headerRef} className="flex flex-row items-center py-1 border-b-1 h-[60px] sm:h-[85px]">
-                <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-3xl w-[15vw] md:text-5xl xl:text-6xl pl-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
-                <h1 className="text-2xl w-[70vw] lg:text-4xl xl:text-5xl font-allerta-stencil text-center self-center">Job Application Tracker</h1>
-                <div onClick={clickAvatar} ref={avatarRef} className="w-[15vw] md:pl-[6vw] flex flex-col items-center self-center cursor-pointer">
-                    <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 md:h-9 md:min-w-9"/>
-                    <h1 className="font-akaya-kanadaka text-[11px] lg:text-[14px]">John Doe</h1>
+            <header ref={headerRef} className="flex flex-row items-center py-1 border-b-1 h-[65px] sm:h-[85px] justify-between">
+                <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-[45px] sm:text-[42px] md:text-[52px] lg:text-6xl pl-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
+                <h1 className="hidden sm:block sm:text-[32px] md:text-[42px] lg:text-5xl font-allerta-stencil text-center self-center">Job Application Tracker</h1>
+                <div onClick={clickAvatar} ref={avatarRef} className="flex flex-col items-center self-end cursor-pointer md:pl-19 w-[72px] sm:w-[86.5px] md:w-[161px] lg:w-[174.5px]">
+                    <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 sm:h-9 sm:min-w-9"/>
+                    <h1 className="font-akaya-kanadaka text-[12px] sm:text-[14px]">John Doe</h1>
                 </div>
             </header>
             <nav ref={navRef} style={{top: `${headerHeight}px`}} className={`absolute w-fit flex flex-col right-0 z-20 bg-[#BAD8C6] 
