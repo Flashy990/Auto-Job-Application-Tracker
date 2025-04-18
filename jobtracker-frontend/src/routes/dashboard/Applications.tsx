@@ -119,7 +119,7 @@ export default function Applications() {
                 <div className="flex flex-col items-center">
                     <form role='search' className="mt-5 flex flex-row gap-3 items-center" onSubmit={clickSearch}>
                         <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle focus:outline-0 focus:border-secondary" type="search" id="search" placeholder="search for applications" name="application"/>
-                        <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
+                        <button type='submit' className="h-5 w-5 cursor-pointer" disabled={loadingSA}><img src={searchLogo} alt="search-logo"/></button>
                     </form>
                     <div className="flex flex-col gap-5 flex-grow">
                         <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
