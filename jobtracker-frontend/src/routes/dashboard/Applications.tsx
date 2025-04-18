@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setApplicationId } from "@store/applicationIdSlice";
 import useDeleteApplication from "@hooks/job-applications/useDeleteApplication";
 import AlertBox from "@components/AlertBox";
+import useSearchApplications from "~/hooks/job-applications/useSearchApplications";
 
 export default function Applications() {
     const [statusClick, setStatusClick] = useState('');
@@ -22,6 +23,7 @@ export default function Applications() {
     const dispatch = useDispatch();
     const {loadingGAS, getApplicationsByStatus} = useGetApplicationsByStatus();
     const {loadingDA, deleteApplication} = useDeleteApplication();
+    const {loadingSA, searchApplications} = useSearchApplications();
     const [startRow, setStartRow] = useState(0);
     const [endRow, setEndRow] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -33,11 +35,11 @@ export default function Applications() {
     const PAGES_DISPLAY = 5;
     let pages = Math.ceil(displayApplications.length / APPLICATIONS_PER_PAGE);
 
-    // useEffect(() => {
-    //     if(!authUser) {
-    //         navigate('/');
-    //     }
-    // },[]);
+    useEffect(() => {
+        if(!authUser) {
+            navigate('/');
+        }
+    },[]);
 
     const clickPrev = () => {
         if(curPage > 1) {
@@ -83,8 +85,16 @@ export default function Applications() {
         }
     };
 
-    const clickSearch = (e: FormEvent) => {
-
+    const clickSearch = async (e: FormEvent) => {
+        e.preventDefault();
+        if(searchValue !== '') {
+            const searchedApplications = await searchApplications(searchValue);
+            if(searchedApplications) {
+                setDisplayApplications(searchedApplications);
+                setCurPage(1);
+                setStatusClick('');
+            }
+        }
     }
 
     const clickDelete = async (id: number) => {
@@ -107,7 +117,7 @@ export default function Applications() {
              {/* desktop view */}
             <aside className="bg-[#BAD8C6]/50 z-10 hidden md:flex flex-col items-center justify-between px-5 min-h-[calc(100vh-85px)]">
                 <div className="flex flex-col items-center">
-                    <form role='search' className="mt-5 flex flex-row gap-3 items-center">
+                    <form role='search' className="mt-5 flex flex-row gap-3 items-center" onSubmit={clickSearch}>
                         <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle focus:outline-0 focus:border-secondary" type="search" id="search" placeholder="search for applications" name="application"/>
                         <button type='submit' className="h-5 w-5 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
                     </form>
@@ -156,14 +166,14 @@ export default function Applications() {
                 </div>
             </aside>
 
-            {/* desktop view for applications */}
-            <div className="hidden md:flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between md:min-h-[calc(100vh-85px)]">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 z-0">
+            {/* applications */}
+            <div className="text-[12px] sm:text-[1rem] flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between md:min-h-[calc(100vh-85px)]">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 z-0">
                     { displayApplications.slice(startRow, endRow).map((application, index) => {
                         return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
                         className={`relative w-[100%] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
                                 <img src={crossDelLogo} alt="delete-logo" onClick={(e) =>{e.stopPropagation();setIsDeleting(true);setIsDeletingId(application.id)}} className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 cursor-pointer ${isManaging ? '' : 'hidden'}`}/>
-                                <div className="flex flex-row font-allerta-stencil text-[17px] absolute -top-3.5 left-2.5 gap-1">
+                                <div className="flex flex-row font-allerta-stencil text-[15px] sm:text-[17px] absolute -top-2.5 sm:-top-3.5 left-2.5 gap-1">
                                     <p className="bg-gray-100 w-fit">{(curPage - 1) * APPLICATIONS_PER_PAGE + index + 1}</p>
                                     <p className="bg-gray-100 w-fit">{application.company}</p>
                                     <p className="bg-gray-100 w-fit text-[#BAD8C6]">{application.status}</p>
@@ -182,49 +192,6 @@ export default function Applications() {
                                 </div>
                             </div>
                         })}   
-                </div>
-                <div className="flex flex-row gap-7 items-center mb-5 mt-5">
-                    <button onClick={clickPrev} className="cursor-pointer">Previous</button>
-                    {/* implementing pagination ... */}
-                    <div className="flex flex-row gap-6 items-center text-center ">
-                        {pages - curPage + 1 < PAGES_DISPLAY ? (
-                            Array.from({length: pages - curPage + 1}).map((_, index) => {
-                                return <button className={`border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7 cursor-pointer`} onClick={() => clickPage(curPage + index)}>{curPage + index}</button>
-                            })
-                        ) : (Array.from({length: 5}).map((_,index) => {
-                            return <button className={`border-3 border-[#BAD8C6] rounded-[5px] w-6 h-7 cursor-pointer`} onClick={() => clickPage(curPage + index)}>{curPage + index}</button>
-                        }))}
-                    </div>
-                    <button onClick={clickNext} className="cursor-pointer">Next</button>
-                </div>
-            </div>
-
-            {/* mobile view for applications */}
-            <div className="md:hidden mt-8 flex flex-col items-center text-[12px] sm:text-[1rem]">
-                <div className="grid grid-cols-2 gap-5 mx-6">
-                    {displayApplications.slice(startRow, endRow).map((application, index) => {
-                        return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
-                        className={`relative w-[100%] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
-                                <img src={crossDelLogo} alt="delete-logo" onClick={(e) =>{e.stopPropagation();setIsDeleting(true);setIsDeletingId(application.id)}} className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 cursor-pointer ${isManaging ? '' : 'hidden'}`}/>
-                                <div className="flex flex-row font-allerta-stencil text-[15px] sm:text-[17px] absolute -top-2.5 sm:-top-3.5 left-2.5 gap-1">
-                                    <p className="bg-gray-100 w-fit">{(curPage - 1) * APPLICATIONS_PER_PAGE + index + 1}</p>
-                                    <p className="bg-gray-100 w-fit">{application.company}</p>
-                                    <p className="bg-gray-100 w-fit text-[#BAD8C6]">{application.status}</p>
-                                </div>
-                                <div className="border-3 overflow-y-auto h-40 md:h-50 px-2 rounded-[15px] flex flex-col pt-3">
-                                    <p className="border-b-2">{application.jobPosition}</p>
-                                    <p className="border-b-2">{application.salaryRange}</p>
-                                    <p className="border-b-2">{application.location}</p>
-                                    <p className="border-b-2">{application.documents.join(', ')}</p>
-                                    <p className="w-[100%]">Overflow content is clipped at the element's 
-                                        padding box, and overflow content can be scrolled into view using 
-                                        scroll bars. Unlike scroll, user agents display scroll bars only if 
-                                        the content is overflowing. If content fits inside the element's padding 
-                                        box, it looks the same as with visible but still establishes a new formatting 
-                                        context. The element box is a scroll container.</p>
-                                </div>
-                            </div>
-                    })}
                 </div>
                 <div className="flex flex-row gap-7 items-center mb-5 mt-5">
                     <button onClick={clickPrev} className="cursor-pointer">Previous</button>

@@ -1,8 +1,9 @@
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { axiosInstance } from "~/libs/axios";
-import { handleApiError, type ErrorResponse } from "../handleError";
+import { handleApiError } from "../handleError";
 import { useAuth } from "~/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export interface JobApplication {
     companyName: string;
@@ -19,7 +20,8 @@ export interface JobApplication {
 
 const useCreateApplication = () => {
     const [loadingCA, setLoadingCA] = useState(false);
-    const { authUser } = useAuth();
+    const { authUser, setAuthUser } = useAuth();
+    const navigate = useNavigate();
     
     const createApplication = async (jobApplication: JobApplication) => {
         setLoadingCA(true);
@@ -28,7 +30,7 @@ const useCreateApplication = () => {
             const res = await axiosInstance.post('/applications', jobApplication, {
                 headers: {
                     "Content-Type": 'application/json',
-                    "Authorization": `Bearer ${authUser.token}`
+                    "Authorization": `Bearer ${authUser?.accessToken}`,
                 }
             });
 
@@ -40,8 +42,13 @@ const useCreateApplication = () => {
             if(message === 'Unknown error') {
                 console.log(details);
                 toast.error('Unexpectd error occurred');
+            } else if(details === 401){
+                toast.error('Unauthorized. Please login again.');
+                localStorage.removeItem('authUser');
+                setAuthUser(null);
+                navigate('/login');
             } else {
-                console.log(details);
+                console.log(message);
                 toast.error('Failed to create the new application');
             }
         } finally {

@@ -1,47 +1,46 @@
-import {  useState } from "react"
+import { useState } from "react";
+import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
 import { handleApiError } from "../handleError";
 import toast from "react-hot-toast";
-import { useAuth } from "~/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const useGetApplicationsByStatus = () => {
-    const [loadingGAS, setLoadingGAS] = useState(false);
+const useSearchApplications = () => {
+    const [loadingSA, setLoadingSA] = useState(false);
     const {authUser, setAuthUser} = useAuth();
     const navigate = useNavigate();
 
-    const getApplicationsByStatus = async (status: string) => {
-        setLoadingGAS(true);
+    const searchApplications = async (query: string) => {
+        setLoadingSA(true);
 
         try{
-            const res = await axiosInstance.get(`/applications/status/${status}`, {
+            const res = await axiosInstance.get(`/applications/search/${query}`, {
                 headers: {
                     "Authorization": `Bearer ${authUser?.token}`
                 }
-            });
+            })
 
             return res.data;
         } catch(error) {
             const {message, details} = handleApiError(error);
             if(message === 'Unknown error') {
                 console.log(details);
-                toast.error('Unexpectd error occurred');
-            } else if(details === 401) {
+                toast.error('Unexpected error occurred');
+            } else if (details === 401) {
                 toast.error('Session expired, please login again');
                 localStorage.removeItem('authUser');
                 setAuthUser(null);
                 navigate('/login');
             } else {
                 console.log(message);
-                toast.error(`Failed to get your applications with status ${status}`);
+                toast.error(`Failed to search applications with query: ${query}`);
             }
         } finally {
-            setLoadingGAS(false);
+            setLoadingSA(false);
         }
     }
 
-    return {loadingGAS, getApplicationsByStatus};
-
+    return {loadingSA, searchApplications};
 }
 
-export default useGetApplicationsByStatus;
+export default useSearchApplications;

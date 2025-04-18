@@ -1,16 +1,13 @@
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
-import { axiosInstance } from "@libs/axios";
+import { type ReactNode, createContext, useContext, useState } from "react"
 
 interface AuthContextType {
     authUser: any;
     setAuthUser: (user: any) => void;
-    loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType>({
     authUser: null,
     setAuthUser: () => {},
-    loading: false,
 });
 
 export const useAuth = () => {
@@ -19,28 +16,6 @@ export const useAuth = () => {
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
     const [authUser, setAuthUser] = useState(localStorage.getItem("authUser") || null);
-    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-
-        const checkLoginStatus = async () => {
-
-            setLoading(true);
-            try {
-                const res = await axiosInstance.get('/auth/unknown'); // url unknown now
-    
-                setAuthUser(res.data);
-            } catch (error) {
-                setAuthUser(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if(!authUser) {
-            checkLoginStatus();
-        }
-    },[]);
-
-    return <AuthContext.Provider value={{ authUser, setAuthUser, loading }}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{ authUser, setAuthUser }}>{children}</AuthContext.Provider>
 }

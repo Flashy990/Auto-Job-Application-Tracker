@@ -1,7 +1,9 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "~/libs/axios";
-import { handleApiError, type ErrorResponse } from "../handleError";
+import { handleApiError } from "../handleError";
+import { useAuth } from "~/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export interface StatusMap {
     [key: string]: string;
@@ -9,6 +11,8 @@ export interface StatusMap {
 
 const useUpdateApplicationStatus = () => {
     const [loadingUAS, setLoadingUAS] = useState(false);
+    const {authUser, setAuthUser} = useAuth();
+    const navigate = useNavigate();
 
     const updateApplicationStatus = async (id: number, status: StatusMap) => {
 
@@ -18,6 +22,7 @@ const useUpdateApplicationStatus = () => {
             const res = await axiosInstance.patch(`/${id}/status`, status, {
                 headers: {
                     "Content-Type": 'application/json',
+                    "Authorization": `Bearer ${authUser?.token}`
                 }
             })
 
@@ -30,8 +35,13 @@ const useUpdateApplicationStatus = () => {
             if(message === 'Unknown error') {
                 console.log(details);
                 toast.error('Unexpectd error occurred');
+            } else if(details === 401) { 
+                toast.error('Session expired, please login again');
+                localStorage.removeItem("authUser");
+                setAuthUser(null);
+                navigate('/login');
             } else {
-                console.log(details);
+                console.log(message);
                 toast.error(`Failed to update your application(id: ${id})'s status`);
             }
         } finally {

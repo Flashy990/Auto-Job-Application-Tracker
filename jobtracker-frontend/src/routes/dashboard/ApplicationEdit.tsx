@@ -38,24 +38,27 @@ export default function ApplicationEdit() {
                 }
             }
         }
-        // if(!applicationId) {
-        //     navigate('/dashboard/applications');
-        // } else {
-        //     fetchApplication(); 
-        // }
+        
+        if(!applicationId) {
+            navigate('/dashboard/applications');
+        } else {
+            fetchApplication(); 
+        }
     },[applicationId]);
 
-    const clickDelete = async (id:string) => {
-        // await deleteApplication(parseInt(id));
+    const clickDelete = async () => {
+        await deleteApplication(parseInt(applicationId));
         setIsDeleting(false);
         navigate('/dashboard/applications');
     }
 
     const clickSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if(applicationId === 'new') {
-            e.preventDefault();
-            console.log(application);
             await createApplication(application);
+            navigate('/dashboard/applications');
+        } else {
+            await updateApplication(parseInt(applicationId),application);
             navigate('/dashboard/applications');
         }
     }
@@ -64,7 +67,7 @@ export default function ApplicationEdit() {
 
     return (
         <main className="flex flex-row gap-8">
-            {isDeleting && <AlertBox leftButton="Cancel" rightButton="Confirm" dialogue={`Do you want to delete this job application?(id: ${applicationId})`} clickLeft={() => setIsDeleting(false)} clickRight={() => clickDelete(applicationId)}/>}
+            {isDeleting && <AlertBox leftButton="Cancel" rightButton="Confirm" dialogue={`Do you want to delete this job application?(id: ${applicationId})`} clickLeft={() => setIsDeleting(false)} clickRight={() => clickDelete()}/>}
             <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
                 <h1 className="text-[32px] w-[208px] mt-8 flex-grow">
                     {applicationId === 'new' ? 
@@ -122,24 +125,10 @@ export default function ApplicationEdit() {
                                 <label htmlFor="contact-email">Contact Email: </label>
                                 <input type="text" value={application.contactEmail ?? ''} onChange={(e) => setApplication({...application, contactEmail:e.target.value})} className="border-3 rounded-[10px] px-1"/>
                             </div>
-                            {/* <div>
-                                <label htmlFor="documents">Documents: </label>
-                                <div className="mt-3">
-                                    <input type='file' id="document-upload" name="document-upload" 
-                                        accept=".pdf,.doc,.docx" className="sr-only"/>
-                                    <label htmlFor="document-upload" className="border-3 mr-2 rounded-[10px] cursor-pointer">Choose File</label>
-                                    <span id="file-chosen">No file chosen</span>
-                                </div>
-                                <button className="mt-3 cursor-pointer"> + Add Another File</button>
-                            </div> */}
-                            {/* <div>
-                                <label htmlFor="notes">Notes:</label>
-                                <textarea id="notes" className="border-3 block w-100 h-50 rounded-[10px]"/>
-                            </div> */}
                         </div>
                         <div className="flex flex-row gap-5">
-                            <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px] cursor-pointer">{applicationId !== 'new' ? 'Save' : 'Submit'}</button>
-                            {applicationId !== 'new' && <button type='button' onClick={() => setIsDeleting(true)} className="flex border-3 w-fit px-2 rounded-[10px] cursor-pointer">Delete</button>}
+                            <button type="submit" className="flex border-3 w-fit px-2 rounded-[10px] cursor-pointer" disabled={loadingCA || loadingDA || loadingGAI || loadingUA}>{applicationId !== 'new' ? 'Save' : 'Submit'}</button>
+                            {applicationId !== 'new' && <button type='button' onClick={() => setIsDeleting(true)} className="flex border-3 w-fit px-2 rounded-[10px] cursor-pointer" disabled={loadingCA || loadingDA || loadingGAI || loadingUA}>Delete</button>}
                         </div>
                     </form>
                 </div>
