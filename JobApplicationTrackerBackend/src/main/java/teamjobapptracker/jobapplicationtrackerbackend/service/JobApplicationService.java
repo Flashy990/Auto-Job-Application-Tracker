@@ -16,6 +16,9 @@ public interface JobApplicationService {
     
     // Get applications for a user filtered by status
     List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status);
+
+    // Get applications based on search string
+    List<JobApplicationDTO> getApplicationsBySearch(Long userId, String search);
     
     // Update an existing application
     JobApplicationDTO updateApplication(Long id, JobApplicationDTO applicationDTO, Long userId);
@@ -24,5 +27,5 @@ public interface JobApplicationService {
     JobApplicationDTO updateApplicationStatus(Long id, String status, Long userId);
     
     // Delete an application
-    void deleteApplication(Long id, Long userId);
+    JobApplicationDTO deleteApplication(Long id, Long userId);
 } 

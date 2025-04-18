@@ -44,6 +44,12 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByStatus(userId, status));
     }
 
+    @GetMapping("/search/{search}")
+    public ResponseEntity<List<JobApplicationDTO>> getApplicationsBySearch(@PathVariable String search) {
+        Long userId = getAuthenticatedUserId();
+        return ResponseEntity.ok(jobApplicationService.getApplicationsBySearch(userId, search));
+    }
+
     // GET /api/applications/{id} - Get application by ID (with ownership check)
     @GetMapping("/{id}")
     public ResponseEntity<JobApplicationDTO> getApplicationById(@PathVariable Long id) {
@@ -98,10 +104,11 @@ public class JobApplicationController {
 
     // DELETE /api/applications/{id} - Delete an application (with ownership check)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
+    public ResponseEntity<JobApplicationDTO> deleteApplication(@PathVariable Long id) {
         Long userId = getAuthenticatedUserId();
-        jobApplicationService.deleteApplication(id, userId);
-        return ResponseEntity.noContent().build();
+        // jobApplicationService.deleteApplication(id, userId);
+        return ResponseEntity.ok(jobApplicationService.deleteApplication(id, userId));
+        // return ResponseEntity.noContent().build();
     }
 
     // Helper method to get the authenticated user's ID
