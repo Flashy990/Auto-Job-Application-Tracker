@@ -2,7 +2,7 @@ import searchLogo from "/images/search.png";
 import crossDelLogo from "/images/cross.png";
 import addLogo from '/images/add.png';
 import { fakeApplications, fakeStatuses } from "./fakeApplications";
-import { useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "@context/AuthContext";
 import { useNavigate } from "react-router";
 import useGetApplicationsByStatus from "@hooks/job-applications/useGetApplicationsByStatus";
@@ -167,6 +167,7 @@ export default function Applications() {
             </aside>
 
             {/* applications */}
+            <Suspense fallback={<div className="text-2xl text-primary mt-8">Loading your job applications...</div>}>
             <div className="text-[12px] sm:text-[1rem] flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between md:min-h-[calc(100vh-85px)]">
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 z-0">
                     { displayApplications.slice(startRow, endRow).map((application, index) => {
@@ -208,6 +209,7 @@ export default function Applications() {
                     <button onClick={clickNext} className="cursor-pointer">Next</button>
                 </div>
             </div>
+            </Suspense>
         </main>
     );
 }
