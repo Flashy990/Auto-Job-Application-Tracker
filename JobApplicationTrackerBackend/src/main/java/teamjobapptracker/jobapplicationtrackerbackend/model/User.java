@@ -59,4 +59,20 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // New profile fields
+    @Column(name = "avatar_url", nullable = true)
+    private String avatarUrl;
+
+    @Column(nullable = true)
+    private String gender;
+
+    @Column(nullable = true)
+    private String dob;
+
+    @Column(nullable = true)
+    private String education;
+
+    @Column(nullable = true)
+    private String industry;
 }
