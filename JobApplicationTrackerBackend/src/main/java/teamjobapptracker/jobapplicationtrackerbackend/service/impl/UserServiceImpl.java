@@ -84,6 +84,23 @@ public class UserServiceImpl implements UserService {
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
+
+        // Update new profile fields if provided
+        if (userDTO.getAvatarUrl() != null) {
+            existingUser.setAvatarUrl(userDTO.getAvatarUrl());
+        }
+        if (userDTO.getGender() != null) {
+            existingUser.setGender(userDTO.getGender());
+        }
+        if (userDTO.getDob() != null) {
+            existingUser.setDob(userDTO.getDob());
+        }
+        if (userDTO.getEducation() != null) {
+            existingUser.setEducation(userDTO.getEducation());
+        }
+        if (userDTO.getIndustry() != null) {
+            existingUser.setIndustry(userDTO.getIndustry());
+        }
         
         User updatedUser = userRepository.save(existingUser);
         return convertToDTO(updatedUser);
@@ -104,6 +121,14 @@ public class UserServiceImpl implements UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
+
+        // New fields for profile page
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        userDTO.setGender(user.getGender());
+        userDTO.setDob(user.getDob());
+        userDTO.setEducation(user.getEducation());
+        userDTO.setIndustry(user.getIndustry());
+
         // Do not password in DTO for security reasons
         return userDTO;
     }
@@ -113,6 +138,14 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+
+        // New fields for profile page
+        user.setAvatarUrl(userDTO.getAvatarUrl());
+        user.setGender(userDTO.getGender());
+        user.setDob(userDTO.getDob());
+        user.setEducation(userDTO.getEducation());
+        user.setIndustry(userDTO.getIndustry());
+
         // Initialize empty set of roles
         user.setRoles(new HashSet<>());
         return user;
