@@ -45,6 +45,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByStatus(userId, status));
     }
 
+    // GET /api/applications/search/{search} - Search applications for the authenticated user
     @GetMapping("/search/{search}")
     public ResponseEntity<List<JobApplicationDTO>> getApplicationsBySearch(@PathVariable String search) {
         Long userId = getAuthenticatedUserId();

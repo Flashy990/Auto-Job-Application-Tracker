@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
     List<JobApplication> findByUserId(Long userId);
-    List<JobApplication> findByUserIdAndStatus(Long userId, String status);
+    List<JobApplication> findByUserIdAndStatus(Long userId, ApplicationStatus status);
     // List<JobApplication> findByUserIdAndCompanyNameContaining(Long userId, String search);
     // @Query("SELECT j FROM JobApplication j WHERE LOWER(j.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(j.position) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
     //         " OR LOWER(j.jobDescription) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(j.location) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
