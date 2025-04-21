@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 @Data
 public class JobApplication {
 
+    // Enum for application status
+    public enum ApplicationStatus {
+        APPLIED, REJECTED, ACCEPTED, INTERVIEWING
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +41,8 @@ public class JobApplication {
 
     // Default Application Status
     @Column(nullable = false)
-    private String status = "APPLIED";
+    // private String status = "APPLIED";
+    private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @Column(name = "application_date")
     private LocalDate applicationDate;

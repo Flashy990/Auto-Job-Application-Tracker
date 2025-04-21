@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.JobApplicationDTO;
+import teamjobapptracker.jobapplicationtrackerbackend.model.JobApplication.ApplicationStatus;
 import teamjobapptracker.jobapplicationtrackerbackend.service.JobApplicationService;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
 
@@ -39,11 +40,12 @@ public class JobApplicationController {
 
     // GET /api/applications/status/{status} - Get applications by status for the authenticated user
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<JobApplicationDTO>> getApplicationsByStatus(@PathVariable String status) {
+    public ResponseEntity<List<JobApplicationDTO>> getApplicationsByStatus(@PathVariable ApplicationStatus status) {
         Long userId = getAuthenticatedUserId();
         return ResponseEntity.ok(jobApplicationService.getApplicationsByStatus(userId, status));
     }
 
+    // GET /api/applications/search/{search} - Search applications for the authenticated user
     @GetMapping("/search/{search}")
     public ResponseEntity<List<JobApplicationDTO>> getApplicationsBySearch(@PathVariable String search) {
         Long userId = getAuthenticatedUserId();
@@ -93,8 +95,8 @@ public class JobApplicationController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<JobApplicationDTO> updateApplicationStatus(
             @PathVariable Long id, 
-            @RequestBody Map<String, String> statusUpdate) {
-        String status = statusUpdate.get("status");
+            @RequestBody Map<String, ApplicationStatus> statusUpdate) {
+        ApplicationStatus status = statusUpdate.get("status");
         if (status == null) {
             return ResponseEntity.badRequest().build();
         }

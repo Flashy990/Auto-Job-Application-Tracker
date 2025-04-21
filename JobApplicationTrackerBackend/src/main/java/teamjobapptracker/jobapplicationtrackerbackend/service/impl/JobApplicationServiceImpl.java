@@ -6,6 +6,7 @@ import teamjobapptracker.jobapplicationtrackerbackend.dto.JobApplicationDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.exception.ResourceNotFoundException;
 import teamjobapptracker.jobapplicationtrackerbackend.exception.UnauthorizedAccessException;
 import teamjobapptracker.jobapplicationtrackerbackend.model.JobApplication;
+import teamjobapptracker.jobapplicationtrackerbackend.model.JobApplication.ApplicationStatus;
 import teamjobapptracker.jobapplicationtrackerbackend.model.User;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.JobApplicationRepository;
 import teamjobapptracker.jobapplicationtrackerbackend.repository.UserRepository;
@@ -68,7 +69,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public List<JobApplicationDTO> getApplicationsByStatus(Long userId, String status) {
+    public List<JobApplicationDTO> getApplicationsByStatus(Long userId, ApplicationStatus status) {
         return jobApplicationRepository.findByUserIdAndStatus(userId, status).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -131,7 +132,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public JobApplicationDTO updateApplicationStatus(Long id, String status, Long userId) {
+    public JobApplicationDTO updateApplicationStatus(Long id, ApplicationStatus status, Long userId) {
         JobApplication application = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("JobApplication", "id", id));
 
