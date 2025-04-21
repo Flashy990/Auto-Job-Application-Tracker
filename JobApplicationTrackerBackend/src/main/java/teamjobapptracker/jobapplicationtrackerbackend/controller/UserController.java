@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user/profile")
 // For testing and development only
-// For production, maybe I should configure it globally in your WebMvcConfigurer
+// For production, I should configure it globally in your WebMvcConfigurer
 // @CrossOrigin(origins = "*")
 @CrossOrigin(origins = "http://127.0.0.1:3000")
 public class UserController {
