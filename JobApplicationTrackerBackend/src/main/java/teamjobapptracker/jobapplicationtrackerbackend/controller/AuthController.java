@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.AuthRequest;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.AuthResponse;
 import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
-import teamjobapptracker.jobapplicationtrackerbackend.model.User;
+// import teamjobapptracker.jobapplicationtrackerbackend.model.User;
 import teamjobapptracker.jobapplicationtrackerbackend.security.JwtService;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
