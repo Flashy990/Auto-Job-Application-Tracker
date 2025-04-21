@@ -1,6 +1,7 @@
 package teamjobapptracker.jobapplicationtrackerbackend.dto;
 
 import lombok.Data;
+import teamjobapptracker.jobapplicationtrackerbackend.model.JobApplication.ApplicationStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ public class JobApplicationDTO {
     private String position;
     private String jobDescription;
     private String applicationUrl;
-    private String status;
+    private ApplicationStatus status;
     private LocalDate applicationDate;
     private String location;
     private BigDecimal salary;
