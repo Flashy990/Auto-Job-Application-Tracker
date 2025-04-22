@@ -12,4 +12,11 @@ public class UserDTO {
     
     // Password is only used for registration/updates
     private String password;
+
+    // New fields for the profile
+    private String avatarUrl;
+    private String gender;
+    private String dob;
+    private String education;
+    private String industry;
 } 
