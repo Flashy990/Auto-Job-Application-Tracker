@@ -29,7 +29,7 @@ const useLogin = () => {
                 toast.error('Unexpectd error occurred');
             } else {
                 console.log(message, details);
-                toast.error('Failed to login');
+                toast.error('Email and password do not match');
             }
             return false;
         } finally {
