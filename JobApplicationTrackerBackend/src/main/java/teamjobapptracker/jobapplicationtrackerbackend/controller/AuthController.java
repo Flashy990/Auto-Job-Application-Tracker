@@ -1,5 +1,7 @@
 package teamjobapptracker.jobapplicationtrackerbackend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ import teamjobapptracker.jobapplicationtrackerbackend.dto.UserDTO;
 import teamjobapptracker.jobapplicationtrackerbackend.security.JwtService;
 import teamjobapptracker.jobapplicationtrackerbackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -71,5 +76,23 @@ public class AuthController {
                 user.getFirstName(),
                 user.getLastName()
         ));
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "Logged out successfully");
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDTO user = userService.getUserByEmail(userDetails.getUsername());
+        return ResponseEntity.ok(user);
     }
 } 
