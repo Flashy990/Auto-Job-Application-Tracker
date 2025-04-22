@@ -33,7 +33,7 @@ const useCreateApplication = () => {
                     "Authorization": `Bearer ${authUser?.accessToken}`,
                 }
             });
-
+            
             if(res.status === 201) {
                 toast.success('Successfully created the new job application.');
             }

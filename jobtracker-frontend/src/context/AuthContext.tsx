@@ -15,7 +15,9 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
-    const [authUser, setAuthUser] = useState(localStorage.getItem("authUser") || null);
+    const user = localStorage.getItem("authUser");
+    const parsedUser = user ? JSON.parse(user) : null;
+    const [authUser, setAuthUser] = useState(parsedUser);
 
     return <AuthContext.Provider value={{ authUser, setAuthUser }}>{children}</AuthContext.Provider>
 }

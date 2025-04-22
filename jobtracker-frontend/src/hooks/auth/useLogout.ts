@@ -2,7 +2,7 @@ import { useState } from "react"
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
-import { handleApiError, type ErrorResponse } from "../handleError";
+import { handleApiError } from "../handleError";
 
 const useLogout = () => {
     const [loading, setLoading] = useState(false);
