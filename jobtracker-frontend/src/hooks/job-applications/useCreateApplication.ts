@@ -5,12 +5,20 @@ import { handleApiError } from "../handleError";
 import { useAuth } from "~/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+export enum ApplicationStatus {
+    APPLIED = 'APPLIED',
+    INTERVIEWING = 'INTERVIEWING',
+    REJECTED = 'REJECTED',
+    ACCEPTED = 'ACCEPTED'
+}
+
 export interface JobApplication {
+    id: number;
     companyName: string;
     position: string;
     jobDescription: string;
     applicationUrl: string;
-    status: string;
+    status: ApplicationStatus;
     applicationDate: string; // ISO format YYYY-MM-DD
     location: string;
     salary: number;
@@ -30,7 +38,7 @@ const useCreateApplication = () => {
             const res = await axiosInstance.post('/applications', jobApplication, {
                 headers: {
                     "Content-Type": 'application/json',
-                    "Authorization": `Bearer ${authUser?.accessToken}`,
+                    "Authorization": `Bearer ${authUser?.token}`,
                 }
             });
             

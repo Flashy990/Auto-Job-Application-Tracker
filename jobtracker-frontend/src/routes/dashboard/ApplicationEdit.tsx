@@ -7,16 +7,15 @@ import { useNavigate } from "react-router";
 import AlertBox from "@components/AlertBox";
 import useDeleteApplication from "@hooks/job-applications/useDeleteApplication";
 import type { JobApplication } from "@hooks/job-applications/useCreateApplication";
-import useCreateApplication from "@hooks/job-applications/useCreateApplication";
+import useCreateApplication, { ApplicationStatus } from "@hooks/job-applications/useCreateApplication";
 import useUpdateApplication from "@hooks/job-applications/useUpdateApplication";
 
 
 const statusOptions = [
-    { value: 'Applying', label: 'Applying'}, 
-    { value: 'Applied', label: 'Applied'}, 
-    { value: 'Interviewing', label: 'Interviewing'}, 
-    { value: 'Offered', label: 'Offered'}, 
-    { value: 'Rejected', label: 'Rejected'}
+    { value: ApplicationStatus.APPLIED , label: 'Applied'}, 
+    { value: ApplicationStatus.INTERVIEWING, label: 'Interviewing'}, 
+    { value: ApplicationStatus.ACCEPTED, label: 'Accepted'}, 
+    { value: ApplicationStatus.REJECTED, label: 'Rejected'}
 ];
 
 export default function ApplicationEdit() {
@@ -100,7 +99,7 @@ export default function ApplicationEdit() {
                                 <label htmlFor="status">Status: </label>
                                 {statusOptions.map((option, index) => {
                                     return <label>
-                                        <input type="radio" className="accent-primary" value={option.value} checked={application.status === option.value} onChange={(e) => setApplication({...application, status: e.target.value})}/>
+                                        <input type="radio" className="accent-primary" value={option.value} checked={application.status === option.value} onChange={(e) => setApplication({...application, status: e.target.value as ApplicationStatus})}/>
                                         {option.label}
                                     </label>
                                 })}

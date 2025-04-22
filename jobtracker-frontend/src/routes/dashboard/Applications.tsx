@@ -1,7 +1,6 @@
 import searchLogo from "/images/search.png";
 import crossDelLogo from "/images/cross.png";
 import addLogo from '/images/add.png';
-import { fakeApplications, fakeStatuses } from "./fakeApplications";
 import { Suspense, useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "@context/AuthContext";
 import { useNavigate } from "react-router";
@@ -11,25 +10,33 @@ import { setApplicationId } from "@store/applicationIdSlice";
 import useDeleteApplication from "@hooks/job-applications/useDeleteApplication";
 import AlertBox from "@components/AlertBox";
 import useSearchApplications from "~/hooks/job-applications/useSearchApplications";
+import { useGetStats } from "~/hooks/job-applications/useGetStats";
+import useGetApplications from "~/hooks/job-applications/useGetApplications";
+import { JobApplication } from "~/hooks/job-applications/useCreateApplication";
+import toast from "react-hot-toast";
 
 export default function Applications() {
     const [statusClick, setStatusClick] = useState('');
-    const [displayApplications, setDisplayApplications] = useState(fakeApplications);
+    const [displayApplications, setDisplayApplications] = useState<JobApplication[]>([]);
+    const [totalApplications, setTotalApplications] = useState<JobApplication[]>([]);
     const [isManaging, setIsManaging] = useState(false);
     const [curPage, setCurPage] = useState(1);
     const [searchValue, setSearchValue] = useState('');
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const {loadingGA, getApplications} = useGetApplications();
     const {loadingGAS, getApplicationsByStatus} = useGetApplicationsByStatus();
     const {loadingDA, deleteApplication} = useDeleteApplication();
     const {loadingSA, searchApplications} = useSearchApplications();
+    const { getStats } = useGetStats();
     const [startRow, setStartRow] = useState(0);
     const [endRow, setEndRow] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDeletingId, setIsDeletingId] = useState(-1);
     const [showStatus, setShowStatus] = useState(false);
-    const [statusNum, setStatusNum] = useState({Applying: 0, Applied: 0, Interviewing: 0, Offered: 0, Rejected: 0});
+    const [totalNum, setTotalNum] = useState(0);
+    const [statusNum, setStatusNum] = useState({Applied: 0, Interviewing: 0, Accepted: 0, Rejected: 0});
 
     const APPLICATIONS_PER_PAGE = 12;
     const PAGES_DISPLAY = 5;
@@ -39,6 +46,23 @@ export default function Applications() {
         if(!authUser) {
             navigate('/');
         }
+
+        getStats().then((data) => {
+            setTotalNum(data.totalApplications);
+            setStatusNum({
+                Applied: data.totalApplied,
+                Interviewing: data.totalInterviews,
+                Accepted: data.totalOffers,
+                Rejected: data.totalRejections
+            });
+        })
+
+        getApplications().then((applications) => {
+            setTotalApplications(applications);
+            setDisplayApplications(applications);
+        })
+        
+
     },[]);
 
     const clickPrev = () => {
@@ -70,9 +94,10 @@ export default function Applications() {
     const clickFilter = async (status: string) => {
         if(statusClick !== status) {
             // *** temporary solution for display ***
-            setDisplayApplications(fakeApplications.filter(application => application.status === status));
+            setDisplayApplications(totalApplications.filter((application) => application.status ===  status.toUpperCase()));
             setStatusClick(status);
             setCurPage(1);
+            setSearchValue('');
             // const filteredApplications = await getApplicationsByStatus(status);
             // if(filteredApplications) {
             //     setDisplayApplications(filteredApplications);
@@ -80,7 +105,7 @@ export default function Applications() {
             // }
         } else {
             setCurPage(1);
-            setDisplayApplications(fakeApplications);
+            setDisplayApplications(totalApplications);
             setStatusClick('');
         }
     };
@@ -94,13 +119,21 @@ export default function Applications() {
                 setCurPage(1);
                 setStatusClick('');
             }
+        } else {
+            toast.error('Cannot search with empty input');
         }
     }
+
+    useEffect(() => {
+        if(searchValue === '' && statusClick === '') {
+            setDisplayApplications(totalApplications);
+        }
+    },[searchValue]);
 
     const clickDelete = async (id: number) => {
        await deleteApplication(id);
        // *** a temporary solution ***
-       const afterDelete = displayApplications.filter(application => application.id !== id);
+       const afterDelete = await getApplications();
        setDisplayApplications(afterDelete);
        setIsDeleting(false);
        setIsDeletingId(-1);
@@ -118,16 +151,17 @@ export default function Applications() {
             <aside className="bg-[#BAD8C6]/50 z-10 hidden md:flex flex-col items-center justify-between px-5 min-h-[calc(100vh-85px)]">
                 <div className="flex flex-col items-center">
                     <form role='search' className="mt-5 flex flex-row gap-3 items-center" onSubmit={clickSearch}>
-                        <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle focus:outline-0 focus:border-secondary" type="search" id="search" placeholder="search for applications" name="application"/>
+                        <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="text-[12px] border-2 w-41 rounded-xl h-[26px] pl-2 align-middle placeholder:text-[12px] placeholder:align-middle focus:outline-secondary" type="search" id="search" placeholder="search for applications" name="application"/>
                         <button type='submit' className="h-5 w-5 cursor-pointer" disabled={loadingSA}><img src={searchLogo} alt="search-logo"/></button>
                     </form>
-                    <div className="flex flex-col gap-5 flex-grow">
-                        <h1 className="text-[16px] font-allerta-stencil mt-5">Search by status filters</h1>
+                    <div className="flex flex-col gap-1 flex-grow mt-5">
+                        <h1 className="text-[16px] font-allerta-stencil">Search by status filters</h1>
+                        <h1>Total: {totalNum}</h1>
                         <div className="flex flex-col gap-3">
-                            {fakeStatuses.map((status, index) => {
-                                return <button key={status.name} onClick={() => clickFilter(status.name)} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100 cursor-pointer hover:bg-secondary ${status.name === statusClick ? 'bg-secondary' : ''}`}>
-                                    <p className="text-[12px]">{status.name}</p>
-                                    <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
+                            {Object.entries(statusNum).map(([key, value]) => {
+                                return <button key={key} onClick={() => clickFilter(key)} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 bg-gray-100 cursor-pointer hover:bg-secondary ${key === statusClick ? 'bg-secondary' : ''}`}>
+                                    <p className="text-[12px]">{key}</p>
+                                    <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{value}</p>
                                 </button>
                             })}
                         </div>
@@ -147,16 +181,17 @@ export default function Applications() {
                  <div className="relative my-2 px-1">
                     <button className={`hover:bg-secondary rounded-2xl ${showStatus? 'bg-secondary' : ''}`} onClick={clickToShowStatus}>Check Statuses</button>
                     <div className={`${showStatus ? '' : 'hidden'} absolute flex flex-col items-start gap-1 py-1 pl-1.5 pr-4 left-0.5 top-6 bg-primary rounded-[10px]`}>
-                        {fakeStatuses.map((status, index) => {
-                            return <button key={status.name} onClick={() => clickFilter(status.name)} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 cursor-pointer hover:bg-secondary ${status.name === statusClick ? 'bg-secondary' : 'bg-gray-100'}`}>
-                                <p>{status.name}</p>
-                                <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{status.amount}</p>
+                        <h1>Total: {totalNum}</h1>
+                        {Object.entries(statusNum).map(([key, value]) => {
+                            return <button key={key} onClick={() => clickFilter(key)} className={`flex flex-row items-center gap-4 w-fit rounded-xl pl-2 cursor-pointer hover:bg-secondary ${key === statusClick ? 'bg-secondary' : 'bg-gray-100'}`}>
+                                <p>{key}</p>
+                                <p className="flex items-center justify-center text-[10px] bg-[#D6D140] rounded-full w-4.5 h-4.5">{value}</p>
                             </button>
                         })}
                     </div> 
                 </div>
-                <form role="search" className="flex flex-row gap-2 my-2 items-center">
-                    <input className="border-2 w-41 rounded-xl h-[22px] pl-2 placeholder:align-middle" type="search" id="search" placeholder="search for applications" name="application"/>
+                <form role="search" className="flex flex-row gap-2 my-2 items-center" onSubmit={clickSearch}>
+                    <input className="border-2 w-41 rounded-xl h-[22px] pl-2 placeholder:align-middle" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="search" id="search" placeholder="search for applications" name="application"/>
                     <button type='submit' className="h-4 w-4 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
                 </form>
                 <div className={`flex flex-row items-center ${isManaging ? 'gap-10' : ''}`}>
@@ -174,22 +209,19 @@ export default function Applications() {
                         return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
                         className={`relative w-[100%] ${isManaging ? (index % 2 === 0 ? 'animate-shakeOnePlus' : 'animate-shakeTwoPlus')+' cursor-pointer' : '' }`}>
                                 <img src={crossDelLogo} alt="delete-logo" onClick={(e) =>{e.stopPropagation();setIsDeleting(true);setIsDeletingId(application.id)}} className={`h-4.5 absolute z-10 -top-1.5 -right-1.5 cursor-pointer ${isManaging ? '' : 'hidden'}`}/>
-                                <div className="flex flex-row font-allerta-stencil text-[15px] sm:text-[17px] absolute -top-2.5 sm:-top-3.5 left-2.5 gap-1">
+                                <div className="flex flex-row font-allerta-stencil text-[15px] sm:text-[17px] absolute -top-2.5 sm:-top-3.5 left-2.5 gap-4">
                                     <p className="bg-gray-100 w-fit">{(curPage - 1) * APPLICATIONS_PER_PAGE + index + 1}</p>
-                                    <p className="bg-gray-100 w-fit">{application.company}</p>
                                     <p className="bg-gray-100 w-fit text-[#BAD8C6]">{application.status}</p>
                                 </div>
                                 <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3">
-                                    <p className="border-b-2">{application.jobPosition}</p>
-                                    <p className="border-b-2">{application.salaryRange}</p>
+                                    <p className="border-y-2 w-fit rounded-[5px]">{application.companyName}</p>
+                                    <p className="border-b-2">{application.position}</p>
                                     <p className="border-b-2">{application.location}</p>
-                                    <p className="border-b-2">{application.documents.join(', ')}</p>
-                                    <p className="w-[100%]">Overflow content is clipped at the element's 
-                                        padding box, and overflow content can be scrolled into view using 
-                                        scroll bars. Unlike scroll, user agents display scroll bars only if 
-                                        the content is overflowing. If content fits inside the element's padding 
-                                        box, it looks the same as with visible but still establishes a new formatting 
-                                        context. The element box is a scroll container.</p>
+                                    <p className="border-b-2">${application.salary}</p>
+                                    <p className="border-b-2">{application.applicationUrl}</p>
+                                    <p className="border-b-2">Applied Date: {application.applicationDate}</p>
+                                    <p className="border-b-2">Contact: {application.contactName}<br/>{application.contactEmail}</p>
+                                    <p className="w-[100%]">{application.jobDescription}</p>
                                 </div>
                             </div>
                         })}   
