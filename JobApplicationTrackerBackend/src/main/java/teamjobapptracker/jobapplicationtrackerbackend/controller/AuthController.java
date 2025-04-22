@@ -77,5 +77,22 @@ public class AuthController {
                 user.getLastName()
         ));
     }
-
+    
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "Logged out successfully");
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDTO user = userService.getUserByEmail(userDetails.getUsername());
+        return ResponseEntity.ok(user);
+    }
 } 
