@@ -9,6 +9,7 @@ import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
 import { User } from "~/hooks/user/useUpdateUser";
 import { useGetUser } from "~/hooks/user/useGetUser";
+import { useUser } from "~/context/UserContext";
 
 
 const links = [
@@ -31,8 +32,7 @@ const links = [
 
 export default function Home() {
     const {authUser} = useAuth();
-    const [user, setUser] = useState<User>({} as User);
-    const {getUser} = useGetUser();
+    const {user} = useUser();
     const [showNav, setShowNav] = useState(false);
     const [avatarClicked, setAvatarClicked] = useState(false);
     const avatarRef = useRef<HTMLDivElement>(null);
@@ -44,14 +44,6 @@ export default function Home() {
         setShowNav(!showNav);
         setAvatarClicked(true);
     }
-
-    useEffect(() => {
-      if(authUser) {
-        getUser().then((user) => {
-          setUser(user);
-        })
-      }
-    },[authUser]);
 
     useEffect(() => {
 

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "~/context/AuthContext";
 import { useUser } from "~/context/UserContext";
 import { useDeleteUser } from "~/hooks/user/useDeleteUser";
-import { useGetUser } from "~/hooks/user/useGetUser";
 import { User, useUpdateUser } from "~/hooks/user/useUpdateUser";
 
 export default function Privacy() {
@@ -12,7 +11,8 @@ export default function Privacy() {
     const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const {user, setUser} = useUser();
+    const {user} = useUser();
+    const [userInfo, setUserInfo] = useState<User>(user);
     const { loadingUU, updateUser } = useUpdateUser();
     const { deleteUser } = useDeleteUser(); 
 
@@ -39,7 +39,7 @@ export default function Privacy() {
         } else if (password !== confirmPassword) {
             toast.error('Passwords do not match');
         } else {
-            await updateUser(user);
+            await updateUser(userInfo);
         }
     }
 
@@ -47,23 +47,23 @@ export default function Privacy() {
         await deleteUser();
     }
 
-    return <div className="flex flex-col gap-3 items-center">
+    return <div className="flex flex-col gap-3 items-center md:items-start">
     <div className="flex flex-col items-center md:items-start md:flex-row gap-4 md:mt-3 text-[14px] md:text-[16px]">
-        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-3 items-center md:items-start" onSubmit={handleSubmit}>
             <label>Change your password</label>
-            <input type="password" value={password} onChange={(e) => {setPassword(e.target.value);setUser({...user, password:e.target.value})}} placeholder="Enter new password" className="border-2 rounded-[10px] pl-2"/>
+            <input type="password" value={password} onChange={(e) => {setPassword(e.target.value);setUserInfo({...userInfo, password:e.target.value})}} placeholder="Enter new password" className="border-2 rounded-[10px] pl-2"/>
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" className="border-2 rounded-[10px] pl-2" />
-            <button type="submit" className="self-start border-2 rounded-[10px] px-2">Change</button>
+            <button type="submit" className="md:self-start border-2 rounded-[10px] px-2">Change</button>
         </form>
         <div className="flex flex-col gap-2">
-            {password && <div>
-                        <div>{validatePassword.length ? '✔️' : '❌'} at least 6 characters</div>
-                        <div>{validatePassword.upper ? '✔️' : '❌'} one uppercase letter</div>
-                        <div>{validatePassword.lower ? '✔️' : '❌'} one lowercase letter</div>
-                        <div>{validatePassword.number ? '✔️' : '❌'} one number</div>
-                        <div>{validatePassword.special ? '✔️' : '❌'} one special characeter(!@#$%^&*? )</div>
-                    </div>}
-            {password && confirmPassword && <div className={`self-start ${password === confirmPassword ? '' : 'text-red-500'}`}>{password === confirmPassword ? '√ Passwords match' : 'x Passwords do not match'}</div>}
+            <div>
+                <div>{validatePassword.length ? '✔️' : '❌'} at least 6 characters</div>
+                <div>{validatePassword.upper ? '✔️' : '❌'} one uppercase letter</div>
+                <div>{validatePassword.lower ? '✔️' : '❌'} one lowercase letter</div>
+                <div>{validatePassword.number ? '✔️' : '❌'} one number</div>
+                <div>{validatePassword.special ? '✔️' : '❌'} one special characeter(!@#$%^&*? )</div>
+            </div>
+            <div className={`self-start ${confirmPassword && password === confirmPassword ? '' : 'text-red-500'}`}>{confirmPassword && password === confirmPassword ? '√ Passwords match' : 'x Passwords do not match'}</div>
         </div>
         
     </div>

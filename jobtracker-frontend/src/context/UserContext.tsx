@@ -26,11 +26,9 @@ export const UserProvider = ({children} : {children: ReactNode}) => {
         if(authUser) {
             getUser().then((user) => {
                 setUser(user);
-                const newAuthUser = {...authUser, avatarUrl: user.avatarUrl};
-                localStorage.setItem('authUser', JSON.stringify(newAuthUser));
             })
         }
-    },[authUser]);
+    },[]);
 
     return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
 }

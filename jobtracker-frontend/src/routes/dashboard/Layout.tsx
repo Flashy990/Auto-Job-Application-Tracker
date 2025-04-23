@@ -7,6 +7,7 @@ import signoutLogo from '/images/logout.png';
 import { useAuth } from "~/context/AuthContext";
 import { User } from "~/hooks/user/useUpdateUser";
 import { useGetUser } from "~/hooks/user/useGetUser";
+import { useUser } from "~/context/UserContext";
 
 
 const links = [
@@ -36,22 +37,15 @@ export default function DashboardLayout() {
     const headerRef = useRef<HTMLElement>(null);
     const [headerHeight, setHeaderHeight] = useState(0);
     const navigate = useNavigate();
-    const {authUser, setAuthUser} = useAuth();
-    const [user, setUser] = useState<User>({} as User);
-    const {getUser} = useGetUser();
+    const {setAuthUser} = useAuth();
+    const {user} = useUser();
+
 
     const clickAvatar = () => {
         setShowNav(!showNav);
         setAvatarClicked(true);
     }
 
-    useEffect(() => {
-        if(authUser) {
-            getUser().then((user) => {
-                setUser(user);
-            })
-        }
-    },[]);
 
     useEffect(() => {
 
