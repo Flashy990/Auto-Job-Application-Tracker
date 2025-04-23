@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { useAuth } from "@context/AuthContext";
-import maleAvatar from '/images/male-avatar.png';
 import documentPic from '/images/documents-doodle.png';
 import FadeInSection from "@components/FadeInSection";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +7,8 @@ import userLogo from '/images/user.png';
 import dashboardLogo from '/images/dashboard.png';
 import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
+import { User } from "~/hooks/user/useUpdateUser";
+import { useGetUser } from "~/hooks/user/useGetUser";
 
 
 const links = [
@@ -29,8 +30,10 @@ const links = [
 ];
 
 export default function Home() {
-  const {authUser} = useAuth();
-  const [showNav, setShowNav] = useState(false);
+    const {authUser} = useAuth();
+    const [user, setUser] = useState<User>({} as User);
+    const {getUser} = useGetUser();
+    const [showNav, setShowNav] = useState(false);
     const [avatarClicked, setAvatarClicked] = useState(false);
     const avatarRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
@@ -41,6 +44,14 @@ export default function Home() {
         setShowNav(!showNav);
         setAvatarClicked(true);
     }
+
+    useEffect(() => {
+      if(authUser) {
+        getUser().then((user) => {
+          setUser(user);
+        })
+      }
+    },[authUser]);
 
     useEffect(() => {
 
@@ -91,8 +102,8 @@ export default function Home() {
       <h1 className={`hidden sm:block sm:text-[32px] md:text-[42px] lg:text-5xl font-allerta-stencil text-center self-center`}>Job Application Tracker</h1>
       {authUser ?
         ( <div onClick={clickAvatar} className="flex flex-col items-center self-end cursor-pointer md:pl-19 w-[72px] sm:w-[86.5px] md:w-[161px] lg:w-[174.5px]">
-            <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 sm:h-9 sm:min-w-9"/>
-            <h1 className="font-akaya-kanadaka text-[12px] sm:text-[14px]">John Doe</h1>
+            <img src={user.avatarUrl} alt="avatar" className="h-7 min-w-7 sm:h-9 sm:min-w-9"/>
+            <h1 className="font-akaya-kanadaka text-[12px] sm:text-[14px]">{user.firstName} {user.lastName}</h1>
           </div>) :
         (<div className="flex justify-center px-2 flex-row sm:flex-col md:flex-row gap-2 sm:gap-1 md:gap-3 self-end text-[14px] sm:text-[14px] lg:text-[16px]">
             <Link to={'/signup'} className="border-2 px-2 w-max py-1 rounded-xl hover:text-gray-100 hover:bg-gray-900 hover:border-gray-900">Sign up</Link>
@@ -122,20 +133,20 @@ export default function Home() {
         </div>
         <img src={documentPic} alt="document-doodle" className="md:self-end aspect-[calc(547/307)] h-auto w-[50%] " draggable={false}/>
       </div>
-      <div className="flex flex-col gap-10 text-[12px] md:text-[16px]">
+      <div className="flex flex-col gap-10 text-[12px] md:text-[16px] text-center">
           <FadeInSection>
-            <div className="border-2 rounded-2xl bg-gray-200">
-              <h1>Record important details of your job applications</h1>
+            <div className="border-2 rounded-2xl bg-primary">
+              <h1>Our intelligent dashboard gives you a bird's-eye view of all your applications at once</h1>
             </div>
           </FadeInSection>
           <FadeInSection>
-            <div className="border-2 rounded-2xl bg-gray-200">
-              <h1>Update the status of every job application</h1>
+            <div className="border-2 rounded-2xl bg-primary">
+              <h1>Document and categorize application requirements across opportunities to identify skill gaps you might want to address.</h1>
             </div>
           </FadeInSection>
           <FadeInSection>
-            <div className="border-2 rounded-2xl bg-gray-200">
-              <h1>Reflect on your interview performance by adding notes</h1>
+            <div className="border-2 rounded-2xl bg-primary">
+              <h1>Securely store contact information for all your networking connections and hiring managers</h1>
             </div>
           </FadeInSection>
       </div>

@@ -1,10 +1,12 @@
 import { Link, Outlet, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import maleAvatar from "/images/male-avatar.png";
 import userLogo from '/images/user.png';
 import dashboardLogo from '/images/dashboard.png';
 import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
+import { useAuth } from "~/context/AuthContext";
+import { User } from "~/hooks/user/useUpdateUser";
+import { useGetUser } from "~/hooks/user/useGetUser";
 
 
 const links = [
@@ -34,11 +36,22 @@ export default function DashboardLayout() {
     const headerRef = useRef<HTMLElement>(null);
     const [headerHeight, setHeaderHeight] = useState(0);
     const navigate = useNavigate();
+    const {authUser, setAuthUser} = useAuth();
+    const [user, setUser] = useState<User>({} as User);
+    const {getUser} = useGetUser();
 
     const clickAvatar = () => {
         setShowNav(!showNav);
         setAvatarClicked(true);
     }
+
+    useEffect(() => {
+        if(authUser) {
+            getUser().then((user) => {
+                setUser(user);
+            })
+        }
+    },[]);
 
     useEffect(() => {
 
@@ -80,14 +93,21 @@ export default function DashboardLayout() {
         }
     },[showNav]);
 
+
+    const handleSignout = () => {
+        localStorage.removeItem('authUser');
+        setAuthUser(null);
+        navigate('/');
+    }
+
     return (
         <>
             <header ref={headerRef} className="flex flex-row items-center py-1 border-b-1 h-[65px] sm:h-[85px] justify-between">
                 <h1 style={{WebkitTextStroke: `1px black`, textShadow:`2px 2px 2px gray`}} className="font-akaya-kanadaka text-[45px] sm:text-[42px] md:text-[52px] lg:text-6xl pl-4 text-[#BAD8C6] cursor-pointer" onClick={() => navigate('/')}>JAT</h1>
                 <h1 className="hidden sm:block sm:text-[32px] md:text-[42px] lg:text-5xl font-allerta-stencil text-center self-center">Job Application Tracker</h1>
                 <div onClick={clickAvatar} ref={avatarRef} className="flex flex-col items-center self-end cursor-pointer md:pl-19 w-[72px] sm:w-[86.5px] md:w-[161px] lg:w-[174.5px]">
-                    <img src={maleAvatar} alt="avatar" className="h-7 min-w-7 sm:h-9 sm:min-w-9"/>
-                    <h1 className="font-akaya-kanadaka text-[12px] sm:text-[14px]">John Doe</h1>
+                    <img src={user.avatarUrl} alt="avatar" className="h-7 min-w-7 sm:h-9 sm:min-w-9"/>
+                    <h1 className="font-akaya-kanadaka text-[12px] sm:text-[14px]">{user.firstName} {user.lastName}</h1>
                 </div>
             </header>
             <nav ref={navRef} style={{top: `${headerHeight}px`}} className={`absolute w-fit flex flex-col right-0 z-20 bg-[#BAD8C6] 
@@ -98,10 +118,10 @@ export default function DashboardLayout() {
                         <p>{link.name}</p>
                     </Link>
                 })}
-                <div className="flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]">
+                <button onClick={handleSignout} className="flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]">
                     <img className="h-4" src={signoutLogo} alt="singout-logo" />
                     <p>Sign out</p>
-                </div>
+                </button>
             </nav>
             <Outlet />
         </>

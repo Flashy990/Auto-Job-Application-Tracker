@@ -63,7 +63,7 @@ export default function ApplicationEdit() {
             await createApplication(application);
             navigate('/dashboard/applications');
         } else {
-            await updateApplication(parseInt(applicationId),application);
+            await updateApplication(parseInt(applicationId), application);
             navigate('/dashboard/applications');
         }
     }
@@ -71,19 +71,19 @@ export default function ApplicationEdit() {
 
 
     return (
-        <main className="flex flex-row gap-8">
+        <main className="flex flex-col gap-4 md:flex-row md:gap-8">
             {isDeleting && <AlertBox leftButton="Cancel" rightButton="Confirm" dialogue={`Do you want to delete this job application?(id: ${applicationId})`} clickLeft={() => setIsDeleting(false)} clickRight={() => clickDelete()}/>}
-            <aside className="flex flex-col items-center min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
-                <h1 className="text-[32px] w-[208px] mt-8 flex-grow">
+            <aside className="flex flex-row justify-between py-2 md:py-0 md:flex-col items-center md:min-h-[calc(100vh-85px)] px-5 bg-[#BAD8C6]/20">
+                <h1 className="md:text-[32px] md:w-[208px] md:mt-8 md:flex-grow">
                     {applicationId === 'new' ? 
                     "You're adding a new application . . ." : 
                     "Your're editing an application . . ."}
                 </h1>
-                <button onClick={() => navigate("/dashboard/applications")} className="flex flex-row gap-2 items-center border-3 rounded-[10px] px-2 border-black/30 mb-5 cursor-pointer"><img className="h-3" src={backLogo} alt="arrow" />Back</button>
+                <button onClick={() => navigate("/dashboard/applications")} className="flex flex-row gap-2 items-center border-3 rounded-[10px] px-2 border-black/30 md:mb-5 cursor-pointer text-[14px]  md:text-[16px]"><img className="h-3" src={backLogo} alt="arrow" />Back</button>
             </aside>
             <Suspense fallback={<div className="text-2xl">Loading your job application</div>}>
-                <div className="mt-4">
-                    <form role='form' action="" className="flex flex-col gap-6" onSubmit={clickSubmit}>
+                <div className="mx-5 md:mt-4 md:mx-0">
+                    <form role='form' action="" className="flex flex-col gap-6 text-[14px] md:text-[16px]" onSubmit={clickSubmit}>
                         <div className="flex flex-col gap-3">
                             <div>
                                 <label htmlFor="company">Company: </label>

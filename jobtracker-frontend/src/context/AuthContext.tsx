@@ -1,4 +1,5 @@
-import { type ReactNode, createContext, useContext, useState } from "react"
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
+import { useGetUser } from "~/hooks/user/useGetUser";
 
 interface AuthContextType {
     authUser: any;

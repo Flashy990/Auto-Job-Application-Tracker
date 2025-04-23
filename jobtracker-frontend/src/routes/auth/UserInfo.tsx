@@ -1,23 +1,18 @@
-import { useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import blankAvatar from '/images/blank-avatar.png';
-import uploadLogo from '/images/avatar-upload.png';
 import { useNavigate } from 'react-router';
+import { User, useUpdateUser } from '~/hooks/user/useUpdateUser';
+import { useAuth } from '~/context/AuthContext';
+import { useGetUser } from '~/hooks/user/useGetUser';
 
 export default function UserInfo() {
+    const {authUser, setAuthUser} = useAuth();
+    const [user, setUser] = useState<User>({} as User);
+    const {loadingUU, updateUser} = useUpdateUser();
+    const {getUser} = useGetUser();
     const [avatar, setAvatar] = useState(blankAvatar);
-    const [gender, setGender] = useState('');
-    const [birthDay, setBirthDay] = useState('');
-    const [birthMonth, setBirthMonth] = useState('');
-    const [birthYear, setBirthYear] = useState('');
-    const [degree, setDegree] = useState('');
-    const [industry, setIndustry] = useState('');
     const navigate = useNavigate();
-    const avatarInputRef = useRef<HTMLInputElement>(null);
 
-    const monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const longMonths = ['January', 'March', 'May', 'July', 'August', 'October', 'December'];
-    const YEAR_GAP = 125;
-    const LATEST_YEAR = new Date().getFullYear();
     const genderOptions = ['Female', 'Male', 'Non-binary', 'Others', 'Prefer not to say'];
     const degreeOptions = ["High School Diploma", "Associate's Degree", "Bachelor's Degree", 
         "Master's Degree", "Doctoral Degree", "Certificate/Diploma", "No Formal Education", "Other"];
@@ -27,88 +22,77 @@ export default function UserInfo() {
     // then navigate to dashboard. 
     // The user info collection can only be done there.
 
-    
-
-    
-
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if(file) {
-            const reader = new FileReader();
-            reader.addEventListener('load', (e) => setAvatar(e.target?.result as string));
-            reader.readAsDataURL(file);
+    useEffect(() => {
+        if(!authUser) {
+            navigate('/');
         }
-        
-    }
+        if(authUser.firstName || authUser.lastName) {
+            navigate('/dashboard/applications');
+        }
 
-    const handleAvatarClick = () => {
-        avatarInputRef.current?.click();
-    }
+        getUser().then((user) => {
+            setUser(user);
+        })
+    },[]);
+
 
     // unimplemented
-    const handleContinueClick = () => {
-
+    const handleContinueClick = async (e: FormEvent) => {
+        e.preventDefault();
+        const updatedUser = await updateUser(user);
+        if(updatedUser) {
+            setUser(updatedUser);
+        }
+        navigate('/dashboard/applications');
     };
 
     return (
         <div className='mt-[13vh]'>
             <h1 className='text-center text-3xl font-allerta-stencil'>Create Your Profile</h1>
-            <form className='flex flex-col items-center gap-8 mt-7'>
+            <form className='flex flex-col items-center gap-8 mt-7' onSubmit={handleContinueClick}>
                 <div>
-                    <div onClick={handleAvatarClick} className='flex relative w-fit cursor-pointer'>
+                    <div className='flex relative w-fit'>
                         <img src={avatar} alt="avatar" className='h-20'/>
-                        <img src={uploadLogo} alt="upload-logo" className='bg-gray-100 rounded-[6px] h-5 absolute right-0 bottom-0'/>
                     </div>
-                    <input ref={avatarInputRef} onChange={handleAvatarChange} type='file' className='hidden'/>
                 </div>
                 <div className='flex flex-col gap-2 items-start'>
                     <div>
-                        <label htmlFor="username">
-                            Username:
-                            <input type="text" placeholder='enter username' className='border-2 rounded-[10px] w-40 ml-2 px-2'/>
+                        <label>
+                            First Name:
+                            <input type="text" placeholder='enter first name' value={user.firstName ?? ''} onChange={(e) => {setUser({...user, firstName:e.target.value, avatarUrl:`https://api.dicebear.com/9.x/pixel-art/svg?seed=${e.target.value}`});setAvatar(`https://api.dicebear.com/9.x/pixel-art/svg?seed=${e.target.value}`)}} className='border-2 rounded-[10px] w-40 ml-2 px-2'/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Last Name:
+                            <input type="text" placeholder='enter last name' value={user.lastName ?? ''} onChange={(e) => {setUser({...user, lastName:e.target.value});setAuthUser({...authUser, lastName:e.target.value})}} className='border-2 rounded-[10px] w-40 ml-2 px-2'/>
                         </label>
                     </div>
                     <div className='w-90 flex flex-row gap-2 items-start'>
-                        <label htmlFor="gender">
+                        <label>
                             Gender:
                         </label>
-                        {/* <OptionsSelector options={genderOptions} onChange={setGender}/> */}
+                        <div className="flex gap-2 flex-wrap">
+                            {genderOptions.map((gender, index) => {
+                                return <label className="flex gap-1">
+                                    <input type="radio" value={gender} checked={gender === user.gender} onChange={(e) => setUser({...user, gender:e.target.value})} className="accent-primary"/>
+                                    {gender}
+                                </label>
+                            })}
+                        </div>
                     </div>
                     <div className='flex flex-row gap-2 items-center'>
                         <label htmlFor="birthday">
                             Date of Birth:
                         </label>
-                        <select name="birthMonth" id="birthMonth" value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)} className='border-2 rounded-[10px] w-fit'>
-                            <option value="" disabled selected>-Month-</option>
-                            {monthArray.map((month, index) => {
-                                return <option value={month}>{month}</option>
-                            })}
-                        </select>
-                        <select name="birthDay" id="birthDay" value={birthDay} onChange={(e) => setBirthDay(e.target.value)} className='border-2 rounded-[10px] w-fit'>
-                            <option value='' disabled selected>-Day-</option>
-                            {longMonths.includes(birthMonth) && Array.from({length: 31}).map((_, index) => {
-                                return <option value={index + 1}>{index + 1}</option>
-                            })}
-                            {!longMonths.includes(birthMonth) && birthMonth !== 'February' && Array.from({length: 30}).map((_, index) => {
-                                return <option value={index + 1}>{index + 1}</option>
-                            })}
-                            {birthMonth === 'February' && Array.from({length:29}).map((_, index) => {
-                                return <option value={index + 1}>{index + 1}</option>
-                            })}
-                        </select>
-                        <select name="birthYear" id="birthYear" value={birthYear} onChange={(e) => setBirthYear(e.target.value)} className='border-2 rounded-[10px] w-fit'>
-                            <option value="" disabled selected>-Year-</option>
-                            {Array.from({length: YEAR_GAP + 1}).map((_, index) => {
-                                return <option value={LATEST_YEAR - index}>{LATEST_YEAR - index}</option>
-                            })}
-                        </select>
+                        <input type="date" value={user.dob ?? ''} onChange={(e) => setUser({...user, dob:e.target.value})} className='border-2 rounded-[10px]'/>
                     </div>
                     <div className='flex flex-row items-center'>
                         <label htmlFor="education">
                             Education: 
                         </label>
-                        <select name="education-degree" id="education-degree" className='ml-2'value={degree} onChange={(e) => setDegree(e.target.value)}>
-                            <option value='' disabled selected>---Select a degree---</option>
+                        <select name="education-degree" id="education-degree" defaultValue={''} className='ml-2' value={user.education?? ''} onChange={(e) => setUser({...user, education:e.target.value})}>
+                            <option value='' disabled>---Select a degree---</option>
                             {degreeOptions.map((degree, index) => {
                                 return <option key={index} value={degree}>{degree}</option>
                             })}
@@ -118,7 +102,7 @@ export default function UserInfo() {
                         <label htmlFor="industry">
                             Industry:
                         </label>
-                        <input type="text" placeholder='Industry' value={industry} onChange={(e) => setIndustry(e.target.value)} className='border-2 rounded-[10px] px-2 ml-2'/>
+                        <input type="text" placeholder='Industry' value={user.industry ?? ''} onChange={(e) => setUser({...user, industry:e.target.value})} className='border-2 rounded-[10px] px-2 ml-2'/>
                     </div>
                 </div>
                 <button type='submit' className='border-2 bg-[#FFC457] rounded-2xl px-8 cursor-pointer'>Continue</button>
