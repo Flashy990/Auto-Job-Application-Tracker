@@ -12,7 +12,7 @@ import AlertBox from "@components/AlertBox";
 import useSearchApplications from "~/hooks/job-applications/useSearchApplications";
 import { useGetStats } from "~/hooks/job-applications/useGetStats";
 import useGetApplications from "~/hooks/job-applications/useGetApplications";
-import { JobApplication } from "~/hooks/job-applications/useCreateApplication";
+import { ApplicationStatus, JobApplication } from "~/hooks/job-applications/useCreateApplication";
 import toast from "react-hot-toast";
 
 export default function Applications() {
@@ -58,10 +58,12 @@ export default function Applications() {
         })
 
         getApplications().then((applications) => {
-            setTotalApplications(applications);
-            setDisplayApplications(applications);
-        })
-        
+            if(applications) {
+                setTotalApplications(applications);
+                setDisplayApplications(applications);
+            }
+            
+        })    
 
     },[]);
 
@@ -93,16 +95,11 @@ export default function Applications() {
 
     const clickFilter = async (status: string) => {
         if(statusClick !== status) {
-            // *** temporary solution for display ***
-            setDisplayApplications(totalApplications.filter((application) => application.status ===  status.toUpperCase()));
+            const filtered = await getApplicationsByStatus(status.toUpperCase());
+            setDisplayApplications(filtered);
             setStatusClick(status);
             setCurPage(1);
             setSearchValue('');
-            // const filteredApplications = await getApplicationsByStatus(status);
-            // if(filteredApplications) {
-            //     setDisplayApplications(filteredApplications);
-            //     setStatusClick(status);
-            // }
         } else {
             setCurPage(1);
             setDisplayApplications(totalApplications);
@@ -167,7 +164,7 @@ export default function Applications() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-3 items-center mb-5">
+                <div className={`flex flex-col gap-3 items-center mb-5 ${totalApplications.length === 0 ? 'hidden' : ''}`}>
                     <button onClick={() => {dispatch(setApplicationId('new'));navigate('/dashboard/edit-application/new');}} className={`font-allerta-stencil w-[130px] rounded-[10px] border-3 border-secondary cursor-pointer ${isManaging ? '' : 'hidden'}`}>Add a new job application</button>
                     <button onClick={() => setIsManaging(!isManaging)} className={`font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 rounded-[10px] cursor-pointer hover:bg-secondary ${isManaging ? 'bg-secondary' : ''}`}>
                         Manage your applications
@@ -194,7 +191,7 @@ export default function Applications() {
                     <input className="border-2 w-41 rounded-xl h-[22px] pl-2 placeholder:align-middle" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="search" id="search" placeholder="search for applications" name="application"/>
                     <button type='submit' className="h-4 w-4 cursor-pointer"><img src={searchLogo} alt="search-logo"/></button>
                 </form>
-                <div className={`flex flex-row items-center ${isManaging ? 'gap-10' : ''}`}>
+                <div className={`flex flex-row items-center ${isManaging ? 'gap-10' : ''} ${totalApplications.length === 0 ? 'hidden' : ''}`}>
                     <button onClick={() => setIsManaging(true)} className={`hover:bg-secondary rounded-2xl px-1 my-2 ${isManaging ? 'hidden' : ''}`}>Manage your application</button>
                     <button onClick={() => {dispatch(setApplicationId('new'));navigate('/dashboard/edit-application/new');}} className={`flex flex-row gap-1 items-center ${isManaging? 'cursor-pointer' : 'hidden'}`}><img src={addLogo} alt="add" className={`h-4`}/>Add new</button>
                     <button onClick={() => setIsManaging(false)} className={`${isManaging ? 'cursor-pointer' : 'hidden'} border-2 px-1 rounded-[10px]`}>Done</button>
@@ -202,6 +199,14 @@ export default function Applications() {
             </aside>
 
             {/* applications */}
+
+            {totalApplications.length === 0 && 
+            <div className="mt-[30vh] font-allerta-stencil flex flex-col gap-3 flex-grow items-center">
+                <h1 className="text-2xl md:text-3xl">Add your first job application now!</h1>
+                <button onClick={() => {dispatch(setApplicationId('new'));navigate('/dashboard/edit-application/new');}} className="border-2 rounded-[10px] px-2 hover:bg-primary cursor-pointer text-[14px] md:text-[16px]">Click to add</button>
+            </div>}
+
+            {totalApplications.length !== 0 && 
             <Suspense fallback={<div className="text-2xl text-primary mt-8">Loading your job applications...</div>}>
             <div className="text-[12px] sm:text-[1rem] flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between md:min-h-[calc(100vh-85px)]">
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 z-0">
@@ -241,7 +246,7 @@ export default function Applications() {
                     <button onClick={clickNext} className="cursor-pointer">Next</button>
                 </div>
             </div>
-            </Suspense>
+            </Suspense>}
         </main>
     );
 }

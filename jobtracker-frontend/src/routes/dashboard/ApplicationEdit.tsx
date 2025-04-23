@@ -9,6 +9,7 @@ import useDeleteApplication from "@hooks/job-applications/useDeleteApplication";
 import type { JobApplication } from "@hooks/job-applications/useCreateApplication";
 import useCreateApplication, { ApplicationStatus } from "@hooks/job-applications/useCreateApplication";
 import useUpdateApplication from "@hooks/job-applications/useUpdateApplication";
+import { useAuth } from "~/context/AuthContext";
 
 
 const statusOptions = [
@@ -26,6 +27,7 @@ export default function ApplicationEdit() {
     const {loadingUA, updateApplication} = useUpdateApplication();
     const {loadingDA, deleteApplication} = useDeleteApplication();
     const navigate = useNavigate();
+    const {authUser} = useAuth();
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
@@ -36,6 +38,10 @@ export default function ApplicationEdit() {
                     setApplication(application);
                 }
             }
+        }
+
+        if(!authUser) {
+            navigate('/login');
         }
         
         if(!applicationId) {

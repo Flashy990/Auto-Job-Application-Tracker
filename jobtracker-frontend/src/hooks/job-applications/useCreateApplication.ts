@@ -6,10 +6,10 @@ import { useAuth } from "~/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export enum ApplicationStatus {
-    APPLIED = 'APPLIED',
-    INTERVIEWING = 'INTERVIEWING',
-    REJECTED = 'REJECTED',
-    ACCEPTED = 'ACCEPTED'
+    APPLIED = "APPLIED",
+    INTERVIEWING = "INTERVIEWING",
+    REJECTED = "REJECTED",
+    ACCEPTED = "ACCEPTED"
 }
 
 export interface JobApplication {

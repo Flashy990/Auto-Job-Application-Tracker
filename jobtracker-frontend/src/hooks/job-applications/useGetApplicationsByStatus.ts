@@ -16,7 +16,7 @@ const useGetApplicationsByStatus = () => {
         try{
             const res = await axiosInstance.get(`/applications/status/${status}`, {
                 headers: {
-                    "Authorization": `Bearer ${authUser?.token}`
+                    "Authorization": `Bearer ${authUser?.token}`,
                 }
             });
 

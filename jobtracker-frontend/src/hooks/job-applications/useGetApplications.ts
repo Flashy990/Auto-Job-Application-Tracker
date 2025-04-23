@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast";
 import { useAuth } from "~/context/AuthContext";
 import { axiosInstance } from "~/libs/axios";
@@ -32,6 +32,8 @@ const useGetApplications = () => {
                 localStorage.removeItem("authUser");
                 setAuthUser(null);
                 navigate('/login');
+            } else if(details === 404) {
+                console.error(message);
             } else {
                 console.log(message);
                 toast.error('Failed to get your applications');
