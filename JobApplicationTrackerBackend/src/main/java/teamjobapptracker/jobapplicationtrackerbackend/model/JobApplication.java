@@ -42,6 +42,7 @@ public class JobApplication {
     // Default Application Status
     @Column(nullable = false)
     // private String status = "APPLIED";
+    @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @Column(name = "application_date")
