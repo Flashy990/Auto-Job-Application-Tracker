@@ -37,6 +37,8 @@ export default function Applications() {
     const [showStatus, setShowStatus] = useState(false);
     const [totalNum, setTotalNum] = useState(0);
     const [statusNum, setStatusNum] = useState({Applied: 0, Interviewing: 0, Accepted: 0, Rejected: 0});
+    const [mousePos, setMousePos] = useState({x: 0, y: 0});
+    const [isHovering, setIsHovering] = useState(false);
 
     const APPLICATIONS_PER_PAGE = 12;
     const PAGES_DISPLAY = 5;
@@ -65,6 +67,19 @@ export default function Applications() {
             
         })    
 
+    },[]);
+
+     
+
+    useEffect(() => {
+        const handleMouseMove = (e: globalThis.MouseEvent) => {
+            setMousePos({x: e.clientX, y: e.clientY});
+        }
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        }
     },[]);
 
     const clickPrev = () => {
@@ -143,6 +158,7 @@ export default function Applications() {
     return (
         <main className="flex flex-col md:flex-row">
             {isDeleting && <AlertBox leftButton={"Cancel"} rightButton={"Confirm"} dialogue={`Do you want to delete this job application(id: ${isDeletingId})?`} clickLeft={()=>{setIsDeleting(false);setIsDeletingId(-1)}} clickRight={()=> {clickDelete(isDeletingId)}}/>}
+            {isHovering && isManaging && <div style={{left: `${mousePos.x + 15}px`, top:`${mousePos.y}px`}} className="absolute text-[12px] md:text-[14px] bg-primary z-10 px-1 rounded-[5px]">Click box to edit</div>}
              {/* desktop view */}
             <aside className="bg-[#BAD8C6]/50 z-10 hidden md:flex flex-col items-center justify-between px-5 min-h-[calc(100vh-85px)]">
                 <div className="flex flex-col items-center">
@@ -165,7 +181,7 @@ export default function Applications() {
                 </div>
                 <div className={`flex flex-col gap-3 items-center mb-5 ${totalApplications.length === 0 ? 'hidden' : ''}`}>
                     <button onClick={() => {dispatch(setApplicationId('new'));navigate('/dashboard/edit-application/new');}} className={`font-allerta-stencil w-[130px] rounded-[10px] border-3 border-secondary cursor-pointer ${isManaging ? '' : 'hidden'}`}>Add a new job application</button>
-                    <button onClick={() => setIsManaging(!isManaging)} className={`font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 rounded-[10px] cursor-pointer hover:bg-secondary ${isManaging ? 'bg-secondary' : ''}`}>
+                    <button onClick={() => {setIsManaging(!isManaging)}} className={`font-allerta-stencil text-[20px] w-[162px] border-3 border-black/30 rounded-[10px] cursor-pointer hover:bg-secondary ${isManaging ? 'bg-secondary' : ''}`}>
                         Manage your applications
                     </button>
                 </div>
@@ -207,7 +223,7 @@ export default function Applications() {
 
             {totalApplications.length !== 0 && 
             <Suspense fallback={<div className="text-2xl text-primary mt-8">Loading your job applications...</div>}>
-            <div className="text-[12px] sm:text-[1rem] flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between md:min-h-[calc(100vh-85px)]">
+            <div className="text-[12px] sm:text-[1rem] flex mt-8 mx-4 flex-col items-center z-0 flex-grow justify-between min-h-[calc(100vh-65px-38px-32px)] sm:min-h-[calc(100vh-85px-38px-32px)] md:min-h-[calc(100vh-85px-32px)]">
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 z-0">
                     { displayApplications.slice(startRow, endRow).map((application, index) => {
                         return <div key={application.id} onClick={() => {if(isManaging) {dispatch(setApplicationId(`${application.id}`));navigate(`/dashboard/edit-application/${application.id}`);}}}  
@@ -217,7 +233,7 @@ export default function Applications() {
                                     <p className="bg-gray-100 w-fit">{(curPage - 1) * APPLICATIONS_PER_PAGE + index + 1}</p>
                                     <p className="bg-gray-100 w-fit text-[#BAD8C6]">{application.status}</p>
                                 </div>
-                                <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3">
+                                <div className="border-3 overflow-y-auto h-50 px-2 rounded-[15px] flex flex-col pt-3" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
                                     <p className="border-y-2 w-fit rounded-[5px]">{application.companyName}</p>
                                     <p className="border-b-2">{application.position}</p>
                                     <p className="border-b-2">{application.location}</p>
