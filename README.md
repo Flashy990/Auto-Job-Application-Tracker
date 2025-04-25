@@ -11,7 +11,7 @@ The project consists of three main components:
 
 - Java 17
     - build.gradle specifies the Java version. In our current [build.gradle](JobApplicationTrackerBackend/build.gradle), we are using Java 17.
-- Node.js 18 or higher
+- Node.js **version 20.12.2** or higher
 - npm package manager
 - PostgreSQL
     - Make sure PostgreSQL is correctly set up.
