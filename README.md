@@ -39,8 +39,24 @@ The project consists of three main components:
 The backend server will start on `http://localhost:8080`
 
 ### Frontend Setup
+Please check your **Node.js version** first. If you fail to set up, please update your version. For your reference, we run the frontend with **version 20.12.2**.
 
-TODO by frontend team
+1. Navigate to the frontend directory
+```bash
+cd jobtracker-frontend
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Run the application
+```bash
+npm run dev
+```
+
+The fronend server will start on `http://localhost:3000`
 
 ## Project Structure
 
@@ -52,7 +68,12 @@ TODO by frontend team
     - Once again, make sure these are correctly update with your PostgreSQL configuration.
 
 ### Frontend
-TODO by frontend team
+- The frontend is built with TypeScript, React and Vite
+- We use Redux Toolkit for state management and Tailwind CSS for styling.
+- Main application code is in `src`.
+  - Components use PascalCase naming
+  - Hooks use camelCase with "use" prefix
+  - Each feature manages its own state slice and API interactions
 
 ## Members:
 - Flashy990 - Aryan Kakadia
