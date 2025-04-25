@@ -55,7 +55,7 @@ export default function Privacy() {
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" className="border-2 rounded-[10px] pl-2" />
             <button type="submit" className="md:self-start border-2 rounded-[10px] px-2">Change</button>
         </form>
-        <div className="flex flex-col gap-2">
+        {password && <div className="flex flex-col gap-2">
             <div>
                 <div>{validatePassword.length ? '✔️' : '❌'} at least 6 characters</div>
                 <div>{validatePassword.upper ? '✔️' : '❌'} one uppercase letter</div>
@@ -64,7 +64,8 @@ export default function Privacy() {
                 <div>{validatePassword.special ? '✔️' : '❌'} one special characeter(!@#$%^&*? )</div>
             </div>
             <div className={`self-start ${confirmPassword && password === confirmPassword ? '' : 'text-red-500'}`}>{confirmPassword && password === confirmPassword ? '√ Passwords match' : 'x Passwords do not match'}</div>
-        </div>
+        </div>}
+        
         
     </div>
     <button onClick={handleDeleteAccount} className="border-2 w-fit px-2 rounded-[5px] hover:bg-secondary cursor-pointer">Delete My Account</button>
