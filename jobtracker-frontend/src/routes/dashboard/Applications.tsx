@@ -129,7 +129,6 @@ export default function Applications() {
 
     const clickDelete = async (id: number) => {
        await deleteApplication(id);
-       // *** a temporary solution ***
        const afterDelete = await getApplications();
        setDisplayApplications(afterDelete);
        setIsDeleting(false);
