@@ -5,8 +5,6 @@ import dashboardLogo from '/images/dashboard.png';
 import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
 import { useAuth } from "~/context/AuthContext";
-import { User } from "~/hooks/user/useUpdateUser";
-import { useGetUser } from "~/hooks/user/useGetUser";
 import { useUser } from "~/context/UserContext";
 
 

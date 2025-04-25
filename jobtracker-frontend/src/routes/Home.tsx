@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "@context/AuthContext";
 import documentPic from '/images/documents-doodle.png';
 import FadeInSection from "@components/FadeInSection";
@@ -7,8 +7,6 @@ import userLogo from '/images/user.png';
 import dashboardLogo from '/images/dashboard.png';
 import settingLogo from '/images/setting.png';
 import signoutLogo from '/images/logout.png';
-import { User } from "~/hooks/user/useUpdateUser";
-import { useGetUser } from "~/hooks/user/useGetUser";
 import { useUser } from "~/context/UserContext";
 
 
@@ -31,7 +29,7 @@ const links = [
 ];
 
 export default function Home() {
-    const {authUser} = useAuth();
+    const {authUser, setAuthUser} = useAuth();
     const {user} = useUser();
     const [showNav, setShowNav] = useState(false);
     const [avatarClicked, setAvatarClicked] = useState(false);
@@ -39,6 +37,7 @@ export default function Home() {
     const navRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLElement>(null);
     const [headerHeight, setHeaderHeight] = useState(0);
+    const navigate = useNavigate();
 
     const clickAvatar = () => {
         setShowNav(!showNav);
@@ -85,6 +84,11 @@ export default function Home() {
         }
     },[showNav]);
 
+    const handleSignout = () => {
+      localStorage.removeItem('authUser');
+      setAuthUser(null);
+      navigate('/');
+  }
 
 
   return (
@@ -110,7 +114,7 @@ export default function Home() {
                         <p>{link.name}</p>
                     </Link>
                 })}
-                <div className="flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]">
+                <div onClick={handleSignout} className="flex flex-row gap-2 items-center cursor-pointer px-2 hover:bg-[#90ab9a] rounded-[10px]">
                     <img className="h-4" src={signoutLogo} alt="singout-logo" />
                     <p>Sign out</p>
                 </div>

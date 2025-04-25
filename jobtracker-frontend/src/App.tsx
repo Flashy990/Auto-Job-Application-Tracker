@@ -5,7 +5,6 @@ import Signup from './routes/auth/Signup';
 import Password from './routes/auth/Password';
 import UserInfo from './routes/auth/UserInfo';
 import Login from './routes/auth/Login';
-import ForgetPassword from './routes/auth/ForgetPassword';
 import NotFound from './routes/error/NotFound';
 import DashboardLayout from './routes/dashboard/Layout';
 import Profile from './routes/dashboard/Profile';
@@ -26,7 +25,6 @@ function App() {
           <Route path='/signup/password' element={<Password/>}/>
           <Route path='/signup/user-info' element={<UserInfo/>} />
           <Route path='/login' element={<Login/>}/>
-          <Route path='/forget-password' element={<ForgetPassword/>}/>
         </Route> 
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='user-profile' element={<Profile/>}/>
