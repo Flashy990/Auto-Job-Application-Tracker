@@ -74,9 +74,3 @@ The fronend server will start on `http://localhost:3000`
   - Components use PascalCase naming
   - Hooks use camelCase with "use" prefix
   - Each feature manages its own state slice and API interactions
-
-## Members:
-- Flashy990 - Aryan Kakadia
-- cjkardokus - Connor Kardokus
-- honzie-y - Hongzhang Yu
-- Allen Guo - Shaohua Guo
